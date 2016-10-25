@@ -1,0 +1,21 @@
+\select@language {german}
+\setcounter {tocdepth}{1}
+\contentsline {section}{\numberline {1}Vorbereitende Aufgaben}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}Welche netzwerkrelevanten Daten ben\IeC {\"o}tigt eine Workstation in einem LAN mindestens?}{1}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Welche weiteren Netzwerkinformationen werden im Heim- und/oder Office-Bereich (z.B. Dienste/Ger\IeC {\"a}te) ben\IeC {\"o}tigt?}{1}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Welche netzwerkrelevanten Daten ben\IeC {\"o}tigt eine Workstation f\IeC {\"u}r das WAN (Internet)?}{1}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Diskutieren Sie Sicherheitsprobleme die durch DHCP entstehen k\IeC {\"o}nnen!}{2}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}DHCP erm\IeC {\"o}glicht es IP-Adress-Ranges (Scope) zu definieren, wodurch ein ganzer Bereich von IP-Adressen dynamisch verwaltet wird. Ist es dennoch notwendig f\IeC {\"u}r einzelne Hosts IP-Adressen statisch zu vergeben? Warum und f\IeC {\"u}r welche Hosts bzw. Netzwerkkomponenten?}{2}{subsection.1.5}
+\contentsline {subsection}{\numberline {1.6}Was muss man beim Einsatz von DHCP in gerouteten Netzen beachten?}{3}{subsection.1.6}
+\contentsline {subsection}{\numberline {1.7}Welche Parameter k\IeC {\"o}nnen durch DHCP zur Verf\IeC {\"u}gung gestellt werden? Nennen Sie mindestens 10!}{4}{subsection.1.7}
+\setcounter {tocdepth}{2}
+\contentsline {section}{\numberline {2}Durchf\IeC {\"u}hrung}{5}{section.2}
+\contentsline {subsection}{\numberline {2.1}DHCP Client}{5}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}DHCP-Discover}{5}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}DHCP-Offer}{6}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}DHCP-Request}{7}{subsubsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.4}DHCP-ACK}{8}{subsubsection.2.1.4}
+\contentsline {subsection}{\numberline {2.2}Init-Reboot}{9}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Lease Time}{10}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}DHCP Release}{11}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}statische Konfiguration}{12}{subsection.2.5}
