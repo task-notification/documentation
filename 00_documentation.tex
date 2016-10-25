@@ -92,13 +92,20 @@
 % pagestyle für gesamtes Dokument aktivieren
 \pagestyle{fancy}
 
-% Vorbereitende Aufgaben
-\addtocontents{toc}{\protect\setcounter{tocdepth}{2}} % 0 nur > \section zeigen
-\input{02_vorbereitung.tex}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}} % 0 nur > \section zeigen
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}} % nur bis \subsubsection (Standard 3)
+\input{02_einleitung.tex}
 \newpage
 
-% Durchführung
-\addtocontents{toc}{\protect\setcounter{tocdepth}{2}} % nur bis \subsubsection (Standard 3)
-\input{03_durchfuehrung.tex}
+\input{03_anforderungen.tex}
+\newpage
+
+\input{04_vorbetrachtung.tex}
+\newpage
+
+\input{05_realisierung.tex}
+\newpage
+
+\input{06_abgrenzung.tex}
 
 \end{document}
