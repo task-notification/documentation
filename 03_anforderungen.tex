@@ -1,10 +1,17 @@
 \section{Anforderungen}
 
+\subsection{allgemeine Beschreibung der Applikation}
+
+Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlegen, bearbeiten, anzeigen und löschen. Weiterhin gibt es eine Kontaktliste, in welcher alle Kontakte angezeigt werden, die ebenfalls für die Anwendung registriert sind und zu persönlichen Kontakten hinzugefügt wurden. Aufgaben können mit persönlichen Kontakten geteilt werden. Ebenso ist es möglich Gruppen anzulegen, dieser Kontakte hinzuzufügen und Aufgabe mit der Gruppe zu teilen. \\
+
+Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH-Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH-Notification angezeigt sobald die Aufgabe terminiert.
+
+
 \subsection{funktionale Anforderungen}
 
 Die WebApp soll für den \textbf{Mehrbenutzerbetrieb} ausgelegt werden. Ein Benutzer soll sich für die Nutzung \textbf{Registrieren} und anschließend am Portal \textbf{Anmelden} können. Es können eigene \textbf{Aufgabenlisten} angelegt, bearbeitet oder gelöscht werden. Weiterhin können Aufgabenlisten mit mehreren Benutzern (Kontakte bzw. Gruppen) geteilt werden. \\
 
-Zu einer Aufgabenliste können einzelne Aufgaben zugeordnet werden. Eine Aufgabe muss mindestens aus einem Titel bestehen und kann mit einem Ort, einer Beschreibung, einer hinterlegten Checkliste, einem Zeitraum sowie einer Fälligkeit erweitert werden. \\
+Eine Aufgabe muss mindestens aus einem Titel bestehen und kann mit einem Ort, einer Beschreibung, einer hinterlegten Checkliste, einem Zeitraum sowie einer Fälligkeit erweitert werden. \\
 
 Der Benutzer soll mittels PUSH-Benachrichtigungen über aktuelle Änderungen an den Aufgabenlisten und Gruppen informiert werden. 
 
