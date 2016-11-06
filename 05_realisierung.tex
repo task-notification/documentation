@@ -22,8 +22,10 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \subsection{Serverkomponente}
 \subsubsection{API Beschreibung}
 
-\begin{center}
-\begin{tabular}[c]{l | c | l }
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l | c | l }
     \textbf{Route} & \textbf{HTTP-Methode} & \textbf{Beschreibung} \\
     \hline\hline
     /api/signup & POST & Registriert einen neuen Benutzer \\
@@ -35,4 +37,6 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
     /api/tasks/:taskId & PUT & Aktualisiert eine einzelne Aufgabe \\
     /api/tasks/:taskId & DELETE & Löscht eine einzelne Aufgabe \\
 \end{tabular}
-\end{center}
+\caption{Übersicht API Routen}
+\label{tbl_api-routes}
+\end{table}
