@@ -7,7 +7,8 @@ Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlege
 Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH-Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH-Notification angezeigt sobald die Aufgabe terminiert.
 
 
-\subsection{funktionale Anforderungen}
+\subsection{Web Applikation}
+\subsubsection{funktionale Anforderungen}
 
 Die WebApp soll für den \textbf{Mehrbenutzerbetrieb} ausgelegt werden. Ein Benutzer soll sich für die Nutzung \textbf{Registrieren} und anschließend am Portal \textbf{Anmelden} können. Es können eigene \textbf{Aufgabenlisten} angelegt, bearbeitet oder gelöscht werden. Weiterhin können Aufgabenlisten mit mehreren Benutzern (Kontakte bzw. Gruppen) geteilt werden. \\
 
@@ -15,8 +16,26 @@ Eine Aufgabe muss mindestens aus einem Titel bestehen und kann mit einem Ort, ei
 
 Der Benutzer soll mittels PUSH-Benachrichtigungen über aktuelle Änderungen an den Aufgabenlisten und Gruppen informiert werden. 
 
-\subsection{nicht-funktionale Anforderungen}
+\subsubsection{nicht-funktionale Anforderungen}
 
 - Look and Feel einer nativen Android App
 
 - Single Page Application (SPA)
+
+\newpage
+\subsection{Serverkomponente}
+
+\subsubsection{funktionale Anforderungen}
+
+Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful-Schnittstelle zu erfüllen:
+
+\begin{itemize}  
+\item Bereitstellung von CRUD\footnote{\textit{CRUD: create, read, update, delete}}-Funktionalität für Entities
+\item Aufruf von Ressourcen über eindeutige und einfache URLs (z.B. https://example.de/api/task/ und https://example.de/api/task/:taskId) 
+\item Verwendung der standardisierten HTTP-Methoden (GET, POST, PUT und DELETE) 
+\item Rückgabe im JSON-Format
+\item alle Requests werden auf der Konsole ausgegeben
+\end{itemize}
+
+
+\subsubsection{nicht-funktionale Anforderungen}
