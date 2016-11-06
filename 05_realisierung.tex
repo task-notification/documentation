@@ -9,10 +9,30 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 ... Beschreibung (mit Schema) der Softwarearchitektur ...
 ... Tier2/Tier3 ...
 
-\subsection{Umsetzung ServiceWorker}
+\subsection{Clientkomponente}
+\subsubsection{Umsetzung ServiceWorker}
 
 ... Umsetzung mittels ServiceWorker ...
 
-\subsection{Umsetzung mittels nativem Android Service}
+\subsubsection{Umsetzung mittels nativem Android Service}
 
 ... Umsetzung mittels eigenem nativen Service ...
+
+
+\subsection{Serverkomponente}
+\subsubsection{API Beschreibung}
+
+\begin{center}
+\begin{tabular}[c]{l | c | l }
+    \textbf{Route} & \textbf{HTTP-Methode} & \textbf{Beschreibung} \\
+    \hline\hline
+    /api/signup & POST & Registriert einen neuen Benutzer \\
+    /api/authenticate & POST & Authentifiziert einen Benutzer \\
+    \hline
+    /api/tasks & GET & Gibt alle Aufgaben zurück \\
+    /api/tasks & POST & Legt eine neue Aufgabe an \\
+    /api/tasks/:taskId & GET & Gibt eine einzelne Aufgabe zurück \\
+    /api/tasks/:taskId & PUT & Aktualisiert eine einzelne Aufgabe \\
+    /api/tasks/:taskId & DELETE & Löscht eine einzelne Aufgabe \\
+\end{tabular}
+\end{center}
