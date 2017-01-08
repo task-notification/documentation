@@ -19,6 +19,9 @@
 \usepackage{pdfpages}
 \usepackage[export]{adjustbox}
 \usepackage[T1]{fontenc}            % Ermöglicht die automatische Trennung von Worten mit Umlauten
+\usepackage{amssymb}
+\usepackage{tabularx}
+
  
 % Dokumentinformationen
 \usepackage[
@@ -37,8 +40,21 @@
 % fussnote ganz am Ende der Seite
 \usepackage[bottom]{footmisc}
 
+%  Bibliographie
+\usepackage{bibgerm} % Umlaute in BibTeX
+\usepackage{csquotes}
+
 % nicht einrücken nach Absatz
 \setlength{\parindent}{0pt}
+
+\def\code#1{\texttt{#1}}
+\usepackage{etoolbox}
+\makeatletter
+\gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
+\let\@tshortstack\@shortstack
+\patchcmd\@tshortstack\vbox\vtop{}{}
+\makeatother
+
 
 \begin{document}
 
@@ -47,7 +63,7 @@
 
 % Seitenränder anpassen
 \newgeometry{
-    left= 2.5cm, right =3.5cm, bottom = 2.5cm
+    left = 3cm, right = 4.5cm, bottom = 2.5cm
 }
 
 % ============= Kopf- und Fußzeile =============
@@ -61,7 +77,7 @@
     \includegraphics[scale=0.6, valign=c]{hftl_logo_sm.png}
 }
 \cfoot{
-{\scriptsize David Howon (147102) und Michael Müller (147105)}
+%{\scriptsize David Howon (147102) und Michael Müller (147105)}
 }
 \rfoot{\textbf{\thepage}}
 %%
@@ -86,6 +102,10 @@
 %Inhaltsverzeichnis
 \tableofcontents
 
+\newcommand*{\quelle}{%
+  \footnotesize Quelle:
+}
+
 \newpage
 %Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
 \pagenumbering{arabic}
@@ -94,18 +114,36 @@
 
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}} % 0 nur > \section zeigen
 \addtocontents{toc}{\protect\setcounter{tocdepth}{3}} % nur bis \subsubsection (Standard 3)
-\input{02_einleitung.tex}
-\newpage
 
-\input{03_anforderungen.tex}
+\input{02_einleitung.tex}
 \newpage
 
 \input{04_vorbetrachtung.tex}
 \newpage
 
-\input{05_realisierung.tex}
+\input{03_anforderungen.tex}
 \newpage
 
-\input{06_abgrenzung.tex}
+\input{05_konzeption.tex}
+\newpage
 
+\input{06_realisierung.tex}
+\newpage 
+
+\input{07_abgrenzung.tex}
+
+%Literaturverzeichnis
+\newpage
+\bibliographystyle{unsrtdin}
+%\bibliographystyle{gerplain}
+\bibliography{Literatur}
+\thispagestyle{fancy}
+
+\newpage
+
+% ANHANG
+%Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
+\pagenumbering{Roman}
+
+\input{A1_api.tex}
 \end{document}

@@ -7,29 +7,64 @@ Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlege
 Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH-Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH-Notification angezeigt sobald die Aufgabe terminiert.
 
 
+\subsection{Lösung 1: Serviceworker}
+
+\newpage
+\subsection{Lösung 2: nativer Android Dienst}
+
+Tabelle \ref{tbl_anforderungen-android} stellt eine Auflistung von Anforderungen an die Lösung mittels nativem Android Dienst dar.
+\bgroup
+\def\arraystretch{1.5}%  1 is the default, change whatever you need
+\begin{table}[ht]
+\begin{tabularx}{\textwidth}{ |l|X|  }
+    \hline
+    \textbf{KRITERIUM} & \textbf{BESCHREIBUNG} \\
+    \hline
+    1.1 Plattform: Android & …soll für die Android Plattform entwickelt werden. Als Mindestversion soll Android 5.0 (API Level 21) vorausgesetzt werden. Eine Unterstützung anderer Betriebssysteme ist nicht vorgesehen.  \\
+    \hline
+    1.2 Hintergrunddienst & …soll als Hintergrunddienst ohne GUI implementiert werden. \\
+    \hline
+    1.3 automatischer Start & ...soll automatisch nach Systemstart gestartet werden. Wird der Dienst aus irgendeinem Grund beendet, soll er automatisch neustarten. \\
+    \hline
+\end{tabularx}
+\caption{Anforderungen an nativen Dienst}
+\label{tbl_anforderungen-android}
+\end{table}
+\egroup
+
 \subsection{Web Applikation}
 \subsubsection{funktionale Anforderungen}
 
-Die WebApp soll für den \textbf{Mehrbenutzerbetrieb} ausgelegt werden. Ein Benutzer soll sich für die Nutzung \textbf{Registrieren} und anschließend am Portal \textbf{Anmelden} können. Es können eigene \textbf{Aufgabenlisten} angelegt, bearbeitet oder gelöscht werden. Weiterhin können Aufgabenlisten mit mehreren Benutzern (Kontakte bzw. Gruppen) geteilt werden. \\
+\paragraph{[WFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
 
-Eine Aufgabe muss mindestens aus einem Titel bestehen und kann mit einem Ort, einer Beschreibung, einer hinterlegten Checkliste, einem Zeitraum sowie einer Fälligkeit erweitert werden. \\
+\paragraph{[WFA-2] Kontaktliste.} Benutzer können sich untereinander mittels Benutzername bzw. E-Mail Adresse zur persönlichen Kontaktliste hinzufügen.
 
-Der Benutzer soll mittels PUSH-Benachrichtigungen über aktuelle Änderungen an den Aufgabenlisten und Gruppen informiert werden. 
+\paragraph{[WFA-3] Gruppen verwalten. } Benutzer können Gruppen anlegen und andere Benutzer hinzufügen. Ein Gruppenadministrator kann die Gruppe bearbeiten oder löschen. Benutzer können aus einer Gruppe austreten.
 
+\paragraph{[WFA-4] Aufgaben anlegen, bearbeiten und löschen.} Ein Benutzer soll Aufgaben anlegen und anschließend Bearbeiten oder Löschen können.
+Eine Aufgabe muss einen Titel besitzen. Optional können eine Beschreibung, ein Ort, Zeitraum sowie Fälligkeitsdatum hinterlegt werden.
+
+\paragraph{[WFA-5] Aufgaben teilen.} Aufgaben können mit mehreren Benutzer geteilt werden. Ebenfalls können Aufgaben einer Gruppe zugeordnet werden. 
+
+\paragraph{[WFA-6] Benachrichtigungen.} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
+Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
+
+\newpage
 \subsubsection{nicht-funktionale Anforderungen}
 
-- Look and Feel einer nativen Android App
+\paragraph{[WNFA-1] Singlepage Applikation.}
 
-- Single Page Application (SPA)
+\paragraph{[WNFA-2] Offlinefähigkeit.}
+
+\paragraph{[WNFA-3] Look and Feel einer nativen Android App.}\label{par_wnfa3}
+
 
 \newpage
 \subsection{Serverkomponente}
 
 \subsubsection{funktionale Anforderungen}
 
-Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Die API wird mit HTTP Basic Authentication geschützt.
-
-Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful-Schnittstelle zu erfüllen:
+\paragraph{[SFA-1] RESTful-Schnittstelle. }Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful-Schnittstelle zu erfüllen:
 
 \begin{itemize}  
 \item Bereitstellung von CRUD\footnote{\textit{CRUD: create, read, update, delete}}-Funktionalität für Entities
@@ -40,4 +75,11 @@ Der API Server unterstützt folgende Anforderungen um die Funktionalitäten eine
 \end{itemize}
 
 
+\paragraph{[SFA-2] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet. \\
+\textbf{KONZEPT TOKEN BESCHREIBEN}
+
+
 \subsubsection{nicht-funktionale Anforderungen}
+ssdf
+
+
