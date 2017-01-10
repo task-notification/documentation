@@ -1,8 +1,11 @@
-\section{Konzeption}
+\chapter{Konzeption}
 \label{sec_konzeption}
 
-\subsection{Architekturbeschreibung - Serviceworker}
-\label{subsec_architekturbeschreibung}
+\section{Umsetzung mittels Serviceworker}
+\label{subsec_konzeption_serviceworker}
+
+\subsection{Architekturbeschreibung}
+\label{subsubsec_konzeption_serviceworker_architektur}
 
 Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI Logik ist die gesamte Geschäftslogik auf einen dedizierten (Business-)Server ausgelagert. Dieser stellt ebenfalls die Datenbank bereit. Mittels AJAX und REST werden dynamische Daten vom Client beim Server angefragt.
 
@@ -12,7 +15,9 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \label{image_architektur-serviceworker-push}
 \end{figure} 
 
-\subsubsection{Push API}
+\newpage
+\subsection{Push API}
+\label{subsubsec_konzeption_serviceworker_push-api}
 
 \begin{figure}[htp] \centering{
 \centering
@@ -25,7 +30,11 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 ... Beschreibung (mit Schema) der Softwarearchitektur ...
 
 \newpage
-\subsection{Architekturbeschreibung - nativer Android Dienst}
+\section{Umsetzung mittels nativer Android Dienst}
+\label{subsec_konzeption_android}
+
+\subsection{Architekturbeschreibung}
+\label{subsubsec_konzeption_android_architektur}
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/architektur_android.pdf}}
@@ -35,6 +44,7 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 
 ... Beschreibung (mit Schema) der Softwarearchitektur ...
 
+\newpage
 \subsection{Push}
 
 \begin{figure}[htp] \centering{
@@ -44,15 +54,17 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \label{image_architektur-android-push}
 \end{figure}  
 
-\subsection{Datenmodell}
+\section{Datenmodell}
 \label{subsec_datenmodell}
 
 
 
-\subsection{Serverkomponente}
+\section{Serverkomponente}
 \label{subsec_serverkomponente}
 
-\subsubsection{REST Schnittstelle}
+\subsection{REST-API}
+
+Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server} Anforderungen an Serverkomponente) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_api-routes} dargestellt. \\
 
 \begin{table}[h]
 \centering
@@ -72,14 +84,14 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \label{tbl_api-routes}
 \end{table}
 
-\subsection{Benutzeroberfläche}
+\subsubsection{Authentifizierung und Autorisierung} 
+
+Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Autorisierung notwendig. Dazu wird das Token-Verfahren verwendet.
+
+
+\section{Benutzeroberfläche}
 
 ... Mockup ... \\
 ... Beschreibung des UI ...\\
 
 Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\
-
-\subsection{Serviceworker}
-
-
-\subsection{nativer Android Dienst}

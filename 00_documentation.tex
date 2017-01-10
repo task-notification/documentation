@@ -2,11 +2,10 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[fontsize=12pt, paper=a4, headinclude, twoside=false, parskip=half+, pagesize=auto, numbers=noenddot, open=right]{article}
+\documentclass[fontsize=12pt, paper=a4, headinclude, twoside=false, parskip=half+, pagesize=auto, numbers=noenddot, open=right]{scrreprt} %{article}
 
 \usepackage[left= 2cm,right = 2cm, bottom = 2 cm]{geometry}
 \usepackage[onehalfspacing]{setspace}
-
 \usepackage[german]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage{amsmath}
@@ -20,8 +19,9 @@
 \usepackage[export]{adjustbox}
 \usepackage[T1]{fontenc}            % Ermöglicht die automatische Trennung von Worten mit Umlauten
 \usepackage{amssymb}
-\usepackage{tabularx}
-
+\usepackage{ltxtable}
+\usepackage{booktabs-de}
+\usepackage{caption}
  
 % Dokumentinformationen
 \usepackage[
@@ -66,6 +66,9 @@
     left = 3cm, right = 4.5cm, bottom = 2.5cm
 }
 
+\renewcommand*{\chapterheadstartvskip}{\vspace*{.4\baselineskip}}% Abstand 
+\renewcommand*\chapterpagestyle{fancy}
+
 % ============= Kopf- und Fußzeile =============
 \pagestyle{fancy}
 %
@@ -95,16 +98,17 @@
 \let\partbackup\l@part
 \renewcommand*\l@part[2]{\partbackup{#1}{}}
 
+\newcommand*{\quelle}{%
+  \footnotesize Quelle:
+}
+
+
 %Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
 \pagenumbering{Roman}
 \newpage
 \pagestyle{fancy}
 %Inhaltsverzeichnis
 \tableofcontents
-
-\newcommand*{\quelle}{%
-  \footnotesize Quelle:
-}
 
 \newpage
 %Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
@@ -140,8 +144,14 @@
 \thispagestyle{fancy}
 
 \newpage
+% Abbildungsverzeichnis
+\listoffigures
+
 
 % ANHANG
+\newpage
+\addtocontents{toc}{\protect\value{tocdepth}=-1}%
+\captionsetup{list=false} 
 %Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
 \pagenumbering{Roman}
 
