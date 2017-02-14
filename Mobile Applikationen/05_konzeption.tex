@@ -16,7 +16,46 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \end{figure} 
 
 \newpage
-\subsection{Push API}
+\subsection{Applicationserver}
+\label{subsec_konzeption_applicationserver}
+
+\subsubsection{REST-API}
+
+Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server} Anforderungen an Serverkomponente) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_api-routes} dargestellt. \\
+
+\begin{table}[h]
+\centering
+\begin{tabular}{l | c | l }
+    \textbf{Route} & \textbf{HTTP-Methode} & \textbf{Beschreibung} \\
+    \hline\hline
+    /api/signup & POST & Registriert einen neuen Benutzer \\
+    /api/authenticate & POST & Authentifiziert einen Benutzer \\
+    \hline
+    /api/tasks & GET & Gibt alle Aufgaben zurück \\
+    /api/tasks & POST & Legt eine neue Aufgabe an \\
+    /api/tasks/:taskId & GET & Gibt eine einzelne Aufgabe zurück \\
+    /api/tasks/:taskId & PUT & Aktualisiert eine einzelne Aufgabe \\
+    /api/tasks/:taskId & DELETE & Löscht eine einzelne Aufgabe \\
+\end{tabular}
+\caption{Übersicht API Routen}
+\label{tbl_api-routes}
+\end{table}
+
+\subsubsection{Authentifizierung und Autorisierung} 
+
+Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Autorisierung notwendig. Dazu wird das Token-Verfahren verwendet.
+
+\subsection{Client-Oberfläche}
+\label{subsec_konzeption_client-ui}
+
+
+... Mockup ... \\
+... Beschreibung des UI ...\\
+
+Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\
+
+
+\subsection{Push und Notification API}
 \label{subsubsec_konzeption_serviceworker_push-api}
 
 \begin{figure}[htp] \centering{
@@ -62,41 +101,3 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \caption{Datenmodell}
 \label{image_konzeption_datenmodell}
 \end{figure} 
-
-
-\section{Serverkomponente}
-\label{subsec_serverkomponente}
-
-\subsection{REST-API}
-
-Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server} Anforderungen an Serverkomponente) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_api-routes} dargestellt. \\
-
-\begin{table}[h]
-\centering
-\begin{tabular}{l | c | l }
-    \textbf{Route} & \textbf{HTTP-Methode} & \textbf{Beschreibung} \\
-    \hline\hline
-    /api/signup & POST & Registriert einen neuen Benutzer \\
-    /api/authenticate & POST & Authentifiziert einen Benutzer \\
-    \hline
-    /api/tasks & GET & Gibt alle Aufgaben zurück \\
-    /api/tasks & POST & Legt eine neue Aufgabe an \\
-    /api/tasks/:taskId & GET & Gibt eine einzelne Aufgabe zurück \\
-    /api/tasks/:taskId & PUT & Aktualisiert eine einzelne Aufgabe \\
-    /api/tasks/:taskId & DELETE & Löscht eine einzelne Aufgabe \\
-\end{tabular}
-\caption{Übersicht API Routen}
-\label{tbl_api-routes}
-\end{table}
-
-\subsubsection{Authentifizierung und Autorisierung} 
-
-Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Autorisierung notwendig. Dazu wird das Token-Verfahren verwendet.
-
-
-\section{Benutzeroberfläche}
-
-... Mockup ... \\
-... Beschreibung des UI ...\\
-
-Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\

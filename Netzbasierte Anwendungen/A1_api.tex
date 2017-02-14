@@ -1,0 +1,76 @@
+\section{API Beschreibung}
+
+\begin{table}[h]
+    \begin{tabular}{ l }
+        Löscht eine einzelne Aufgabe \\
+    \end{tabular}
+    \caption{Übersicht API Routen}
+    \label{tbl_api-routes}
+\end{table}
+
+
+
+{\Large \textbf{/api/signup}}
+
+
+\fbox{\parbox{0.5\linewidth}{
+    \textbf{Request:}
+    \begin{itemize}  
+        \item {\tshortstack[l]{\textbf{\code{username}}: (String)\\gewünschter Benutzername}}
+        \item {\tshortstack[l]{\textbf{\code{password}}: (String)\\Passwort}}
+        \item {\tshortstack[l]{\textbf{\code{email}}: (String)\\E-Mail Adresse}}
+    \end{itemize}    
+}
+\parbox{0.5\linewidth}{
+    \textbf{Response:}
+    \begin{itemize}  
+        \item {\tshortstack[l]{\textbf{\code{username}}: (String)\\gewünschter Benutzername}}
+        \item {\tshortstack[l]{\textbf{\code{password}}: (String)\\Passwort}}
+        \item {\tshortstack[l]{\textbf{\code{email}}: (String)\\E-Mail Adresse}}
+    \end{itemize}    
+}}
+
+\bgroup
+\def\arraystretch{1}%  1 is the default, change whatever you need
+
+\begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+    \multicolumn{2}{|c|}{Benutzer anlegen } \\
+    \hline
+    URL & \textbf{\code{/api/signup}} \\
+    \hline
+    Methode & \code{GET} \\
+    \hline
+    Request-Parameter & Required: 
+      \begin{itemize}  
+        \item {\tshortstack[l]{\textbf{\code{username}}: (String)\\gewünschter Benutzername}}
+        \item {\tshortstack[l]{\textbf{\code{password}}: (String)\\Passwort}}
+        \item {\tshortstack[l]{\textbf{\code{email}}: (String)\\E-Mail Adresse}}
+      \end{itemize} \\
+    \hline
+    Success-Response & 
+      \begin{itemize}  
+        \item {Code: 200}
+        \item {Content: \code{{success: true, message: 'Successful created new user.'}}}
+      \end{itemize} \\
+    \hline
+    \multicolumn{2}{|l|}{Legt einen neuen Benutzer an. } \\
+    \hline
+    \multicolumn{2}{|l|}{Request } \\
+    \multicolumn{2}{|l|}{ \textbf{\code{username}}: (String) gewünschter Benutzername} \\
+    \multicolumn{2}{|l|}{ \textbf{\code{password}}: (String) Passwort} \\
+    \multicolumn{2}{|l|}{ \textbf{\code{email}}: (String) E-Mail Adresse} \\
+    \hline
+\end{tabularx}
+\egroup
+        
+\begin{itemize}  
+        \item {\tshortstack[l]{\textbf{\code{username}}: (String)\\gewünschter Benutzername}}
+        \item {\tshortstack[l]{\textbf{\code{password}}: (String)\\Passwort}}
+        \item {\tshortstack[l]{\textbf{\code{email}}: (String)\\E-Mail Adresse}}
+    \end{itemize}  
+    \textbf{Response} 
+    \begin{itemize}  
+        \item Bereitstellung von CRUD\footnote{\textit{CRUD: create, read, update, delete}}-Funktionalität für Entities
+        \item Aufruf von Ressourcen über eindeutige und einfache URLs (z.B. https://example.de/api/task/ und https://example.de/api/task/:taskId) 
+    \end{itemize} 

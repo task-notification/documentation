@@ -1,0 +1,186 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[fontsize=12pt, paper=a4, headinclude, twoside=false, parskip=half+, pagesize=auto, numbers=noenddot, open=right]{scrreprt} %{article}
+
+\usepackage[left= 2cm,right = 2cm, bottom = 2 cm]{geometry}
+\usepackage[onehalfspacing]{setspace}
+\usepackage[german]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage[colorinlistoftodos]{todonotes}
+\graphicspath{{images/}}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{pdfpages}
+\usepackage[export]{adjustbox}
+\usepackage[T1]{fontenc}            % Ermöglicht die automatische Trennung von Worten mit Umlauten
+\usepackage{amssymb}
+\usepackage{ltxtable}
+\usepackage{booktabs-de}
+\usepackage{caption}
+ 
+% Dokumentinformationen
+\usepackage[
+	pdftitle={Dokumentation TaskY},
+	pdfsubject={Softwaredokumentation},
+	pdfauthor={Michael Müller},
+	pdftex=true, 
+	colorlinks=true,
+ 	breaklinks=true,
+	citecolor=black,
+	linkcolor=black,	
+	menucolor=black,	
+	urlcolor=black
+]{hyperref}
+
+% fussnote ganz am Ende der Seite
+\usepackage[bottom]{footmisc}
+
+% code snippet
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3,
+  numbers=left,
+  stepnumber=5,    
+  firstnumber=1,
+  numberfirstline=true
+}
+
+%  Bibliographie
+\usepackage{bibgerm} % Umlaute in BibTeX
+\usepackage{csquotes}
+
+% nicht einrücken nach Absatz
+\setlength{\parindent}{0pt}
+
+\def\code#1{\texttt{#1}}
+\usepackage{etoolbox}
+\makeatletter
+\gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
+\let\@tshortstack\@shortstack
+\patchcmd\@tshortstack\vbox\vtop{}{}
+\makeatother
+
+
+\begin{document}
+
+\pagestyle{empty}
+\input{01_title.tex}
+
+% Seitenränder anpassen
+\newgeometry{
+    left = 3cm, right = 4.5cm, bottom = 2.5cm
+}
+
+\renewcommand*{\chapterheadstartvskip}{\vspace*{.4\baselineskip}}% Abstand 
+\renewcommand*\chapterpagestyle{fancy}
+
+% ============= Kopf- und Fußzeile =============
+\pagestyle{fancy}
+%
+\lhead{Dokumentation TaskY}
+\chead{}
+\rhead{\slshape \leftmark}
+%%
+\lfoot{
+    \includegraphics[scale=0.6, valign=c]{hftl_logo_sm.png}
+}
+\cfoot{
+%{\scriptsize David Howon (147102) und Michael Müller (147105)}
+}
+\rfoot{\textbf{\thepage}}
+%%
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% Abstand Fussnote und Fusszeile
+\setlength{\footskip}{-0.5cm} 
+\setlength{\skip\footins}{0.5cm} 
+% Abstand zwischen Fussnoten
+\setlength{\footnotesep}{0.3cm}
+
+% \part im Inhaltsverzeichnis nicht nummerieren
+\makeatletter
+\let\partbackup\l@part
+\renewcommand*\l@part[2]{\partbackup{#1}{}}
+
+\newcommand*{\quelle}{%
+  \footnotesize Quelle:
+}
+
+
+%Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
+\pagenumbering{Roman}
+\newpage
+\pagestyle{fancy}
+%Inhaltsverzeichnis
+\tableofcontents
+
+\newpage
+%Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
+\pagenumbering{arabic}
+% pagestyle für gesamtes Dokument aktivieren
+\pagestyle{fancy}
+
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}} % 0 nur > \section zeigen
+\addtocontents{toc}{\protect\setcounter{tocdepth}{3}} % nur bis \subsubsection (Standard 3)
+
+\input{02_einleitung.tex}
+\newpage
+
+\input{04_vorbetrachtung.tex}
+\newpage
+
+\input{03_anforderungen.tex}
+\newpage
+
+\input{05_konzeption.tex}
+\newpage
+
+\input{06_realisierung.tex}
+\newpage 
+
+\input{07_abgrenzung.tex}
+
+%Literaturverzeichnis
+\newpage
+\bibliographystyle{unsrtdin}
+%\bibliographystyle{gerplain}
+\bibliography{Literatur}
+\thispagestyle{fancy}
+
+\newpage
+% Abbildungsverzeichnis
+\listoffigures
+
+% ANHANG
+\newpage
+\addtocontents{toc}{\protect\value{tocdepth}=-1}%
+\captionsetup{list=false} 
+%Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
+\pagenumbering{Roman}
+\chapter{Anhang}
+\input{A1_api.tex}
+\end{document}

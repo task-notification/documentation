@@ -1,0 +1,141 @@
+% Encoding: UTF-8
+
+@ARTICLE{CARR08,
+  author = {Carr, Nicholas},
+  title = {Is Google Making Us Stupid?},
+  journaltitle = {The Atlantik},
+  year = {Juli/August 2008},
+  pages = {56 - 63},
+  journal = {The Atlantik},
+  owner = {prmueller},
+  timestamp = {2015.06.11}
+}
+
+@BOOK{KEEN07,
+  author = {Keen, Andrew},
+  title = {The Cult of the Amateuer: How Today's Internet is Killing Our Culture
+	and Assaulting Our Economy},
+  year = {2007},
+  publisher = {Nicholas Brealey Publishing},
+  location = {London},
+  address = {London},
+  owner = {prmueller},
+  timestamp = {2015.06.11}
+}
+
+@ARTICLE{CIO_FF2010,
+  author = {Knorr, Eric},
+  title = {2004 – The Year of Web Services},
+  journaltitle = {Fast Forward 2010 – The Fate of IT},
+  year = {Dezember 2003/Januar 2004},
+  series = {Dezember 2003/Januar 2004},
+  url = {http://books.google.de/books?id=1QwAAAAAMBAJ&pg=PA90#v=onepage},
+  journal = {CIO: Fast Forward 2010 – The Fate of IT},
+  owner = {prmueller},
+  timestamp = {2015.06.10}
+}
+
+@BOOK{HALBWEGS_SOZIAL,
+  author = {Lovink, Geert},
+  title = {Das halbwegs Soziale : Eine Kritik der Vernetzungskultur},
+  year = {2012},
+  translator = {aus dem Englischen von Andreas Kallfelz},
+  publisher = {Transcript},
+  location = {Bielefeld},
+  isbn = {978-3-8376-1957-7},
+  address = {Bielefeld},
+  owner = {prmueller},
+  timestamp = {2015.06.10}
+}
+
+@ARTICLE{test,
+  author = {Matsutani, H. and Koibuchi, M. and Yamada, Y. and Hsu, D.F. and Amano,
+	H.},
+  title = {Fat H-Tree: A Cost-Efficient Tree-Based On-Chip Network},
+  year = {2009},
+  volume = {20},
+  number = {8},
+  pages = {1126-1141},
+  issn = {1045-9219},
+  doi = {10.1109/TPDS.2008.233},
+  journal = {Parallel and Distributed Systems, IEEE Transactions on},
+  keywords = {multiprocessor interconnection networks;network-on-chip;cell library;cost-efficient
+	tree-based on-chip network;deadlock-free routing;fat H-tree;microarchitecture
+	domain;network logic area;on-chip routers;process technology;tree
+	networks;tree-based interconnection network;Interconnection networks;Network
+	topology;On-chip interconnection networks;network topology;on-chip
+	networks;routing algorithm.;tree}
+}
+
+@ARTICLE{test2,
+  author = {Matsutani, H. and Koibuchi, M. and Yamada, Y. and Hsu, D.F. and Amano,
+	H.},
+  title = {Fat H-Tree: A Cost-Efficient Tree-Based On-Chip Network},
+  year = {2009},
+  volume = {20},
+  number = {8},
+  pages = {1456f.},
+  issn = {1045-9219},
+  doi = {10.1109/TPDS.2008.233},
+  journal = {Parallel and Distributed Systems, IEEE Transactions on},
+  keywords = {multiprocessor interconnection networks;network-on-chip;cell library;cost-efficient
+	tree-based on-chip network;deadlock-free routing;fat H-tree;microarchitecture
+	domain;network logic area;on-chip routers;process technology;tree
+	networks;tree-based interconnection network;Interconnection networks;Network
+	topology;On-chip interconnection networks;network topology;on-chip
+	networks;routing algorithm.;tree},
+  owner = {prmueller},
+  timestamp = {2015.06.10}
+}
+
+@ARTICLE{OREILLY_NEWS,
+  author = {O'Reilly, Tim},
+  title = {Was ist Web 2.0?
+	
+	Entwurfsmuster und Geschäftsmodelle für die nächste Software Generation},
+  journaltitle = {O'Reilly News},
+  year = {2005},
+  translator = {Deutsche Übersetzung Patrick Holz},
+  subtitle = {Entwurfsmuster und Geschäftsmodelle für die nächste Software Generation},
+  url = {http://www.oreilly.de/artikel/web20_trans.html},
+  journal = {O'Reilly News},
+  owner = {prmueller},
+  publisher = {O'Reilly},
+  timestamp = {2015.06.10}
+}
+
+@BOOK{SCHIRRMACHER,
+  author = {Schirrmacher, Frank},
+  title = {Payback: Warum wir im Informationszeitalter gezwungen sind, zu tun,
+	was wir nicht tun wollen, und wie wir die Kontrolle über unser Denken
+	zurückgewinnen},
+  year = {2009},
+  publisher = {Blessing},
+  location = {München},
+  isbn = {978-3-89667-336-7},
+  address = {München},
+  owner = {prmueller},
+  timestamp = {2015.06.11}
+}
+
+@BOOK{STIEGLER10,
+  author = {Stiegler, Bernard},
+  title = {Taking Care of Youth and the Generations},
+  year = {2010},
+  publisher = {Stanford Unifersity Press},
+  location = {Stanford},
+  address = {Stanford},
+  journal = {Stanford University Press},
+  owner = {prmueller},
+  timestamp = {2015.06.11}
+}
+
+@Misc{MOZ_WIKI,
+  author    = {Mozilla},
+  title     = {Firefox/Push Notifications - MozillaWiki},
+  year      = {2016},
+  timestamp = {08.01.2017},
+  url       = {https://wiki.mozilla.org/Firefox/Push_Notifications},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

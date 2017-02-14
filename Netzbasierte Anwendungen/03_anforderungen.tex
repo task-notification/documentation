@@ -1,0 +1,70 @@
+\chapter{Anforderungen}
+\section{allgemeine Beschreibung der Applikation}
+
+Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlegen, bearbeiten, anzeigen und löschen. Weiterhin gibt es eine Kontaktliste, in welcher alle Kontakte angezeigt werden, die ebenfalls für die Anwendung registriert sind und zu persönlichen Kontakten hinzugefügt wurden. Aufgaben können mit persönlichen Kontakten geteilt werden. Ebenso ist es möglich Gruppen anzulegen, dieser Kontakte hinzuzufügen und Aufgabe mit der Gruppe zu teilen. \\
+
+Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH-Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH-Notification angezeigt sobald die Aufgabe terminiert.
+
+
+\section{Anforderungen an Serviceworker}
+
+\newpage
+\section{Anforderungen an nativen Android Dienst}
+
+Tabelle \ref{tbl_anforderungen-android} stellt eine Auflistung von Anforderungen an die Lösung mittels nativem Android Dienst dar. Diese wurden in die drei Hauptkriterien "Allgemeine technische Anforderungen", "Anforderungen an Webanwendung" und "Anforderungen an Push- und Notifikationkomponente" aufgeteilt.
+
+\LTXtable{\textwidth}{t1.tex}
+
+
+\section{Anforderung an Web Applikation}
+\subsection{funktionale Anforderungen}
+
+\paragraph{[WFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
+
+\paragraph{[WFA-2] Kontaktliste.} Benutzer können sich untereinander mittels Benutzername bzw. E-Mail Adresse zur persönlichen Kontaktliste hinzufügen.
+
+\paragraph{[WFA-3] Gruppen verwalten. } Benutzer können Gruppen anlegen und andere Benutzer hinzufügen. Ein Gruppenadministrator kann die Gruppe bearbeiten oder löschen. Benutzer können aus einer Gruppe austreten.
+
+\paragraph{[WFA-4] Aufgaben anlegen, bearbeiten und löschen.} Ein Benutzer soll Aufgaben anlegen und anschließend Bearbeiten oder Löschen können.
+Eine Aufgabe muss einen Titel besitzen. Optional können eine Beschreibung, ein Ort, Zeitraum sowie Fälligkeitsdatum hinterlegt werden.
+
+\paragraph{[WFA-5] Aufgaben teilen.} Aufgaben können mit mehreren Benutzer geteilt werden. Ebenfalls können Aufgaben einer Gruppe zugeordnet werden. 
+
+\paragraph{[WFA-6] Benachrichtigungen.} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
+Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
+
+\newpage
+\subsection{nicht-funktionale Anforderungen}
+
+\paragraph{[WNFA-1] Singlepage Applikation.}
+
+\paragraph{[WNFA-2] Offlinefähigkeit.}
+
+\paragraph{[WNFA-3] Look and Feel einer nativen Android App.}\label{par_wnfa3}
+
+
+\newpage
+\section{Anforderungen an Serverkomponente}
+\label{subsec_anforderungen_server}
+
+\subsection{funktionale Anforderungen}
+
+\paragraph{[SFA-1] RESTful-Schnittstelle. }Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful-Schnittstelle zu erfüllen:
+
+\begin{itemize}  
+\item Bereitstellung von CRUD\footnote{\textit{CRUD: create, read, update, delete}}-Funktionalität für Entities
+\item Aufruf von Ressourcen über eindeutige und einfache URLs (z.B. https://example.de/api/task/ und https://example.de/api/task/:taskId) 
+\item Verwendung der standardisierten HTTP-Methoden (GET, POST, PUT und DELETE) 
+\item Rückgabe im JSON-Format
+\item alle Requests werden auf der Konsole ausgegeben
+\end{itemize}
+
+
+\paragraph{[SFA-2] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet. \\
+\textbf{KONZEPT TOKEN BESCHREIBEN}
+
+
+\subsection{nicht-funktionale Anforderungen}
+ssdf
+
+

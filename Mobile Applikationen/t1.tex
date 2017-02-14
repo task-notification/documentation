@@ -1,0 +1,29 @@
+\begin{longtable}{@{}XX@{}}  
+\textbf{Kriterium} & \textbf{Der native Dienst soll...} \\[6pt]
+\midrule
+\endhead
+\multicolumn{2}{p{\dimexpr\textwidth-2\tabcolsep\relax}}{\textbf{1. Allgemeine technische Anforderungen}} \\
+\midrule
+1.1 Plattform: Android & …soll für die Android Plattform entwickelt werden. Als Mindestversion soll Android 5.0 (API Level 21) vorausgesetzt werden. Eine Unterstützung anderer Betriebssysteme ist nicht vorgesehen. \\ [6pt]
+1.2 Hintergrunddienst & …soll als Hintergrunddienst ohne GUI implementiert werden. \\[6pt]
+1.3 automatischer Start & ...soll automatisch nach Systemstart gestartet werden. Wird der Dienst aus irgendeinem Grund beendet, soll er automatisch neustarten. \\[6pt]
+1.4 Webserver & ...soll einen Webserver bereitstellen, welcher aus Sicht der Client-Webanwendung das „Caching“ der statischen Ressourcen und die Bereitstellung des Datamodels übernimmt. \\[6pt]
+1.5 Push-Notification & ...soll Benachrichtigungen über die native Notification-API auf dem mobilen Endgerät anzeigen. \\[10pt]
+\midrule
+\multicolumn{2}{p{\dimexpr\textwidth-2\tabcolsep\relax}}{\textbf{2. Anforderungen Webkomponenten}} \\
+\midrule
+2.1 Bereitstellung statischer Ressourcen & …soll einen HTTP Server bereitstellen, welcher die statischen Ressourcen für die Webanwendung auf dem Client lokal bereitstellt. Die Ressourcen bezieht die Dienstanwendung von einem entfernten Webserver und hält diese für die Webanwendung vor (Caching). Dadurch soll eine Offlinefähigkeit der Webanwendung sichergestellt werden. Für die Kommunikation mit der Webanwendung soll die HTTP-Methode GET angewendet werden. \\[6pt]
+2.2 Aktualisierung statischer Ressourcen & ...soll die statischen Ressourcen nicht selbstständig aktualisieren. Statt dessen werden diese über den Updatezyklus der Android Applikation aktuell gehalten. \\[6pt]
+2.3 Verwaltung der GUI-Logik & ...soll die Anzeigelogik innerhalb der GUI verwalten.  \\[6pt]
+2.4 Weiterleitung von Anfragen & …soll Anfragen (Geschäftslogik) aus der Webanwendung an einen entfernten Webserver weiterleiten. Dazu nutzt die Webserverkomponente die RESTful-Schnittstelle des entfernten Servers. Das Ergebnis soll durch die Dienst zwischengespeichert und die Webanwendung bereitgestellt werden. \\[6pt]
+2.5 Änderungen im Offlinebetrieb & …soll Änderungen des Models durch die Webanwendung intern speichern, wenn keine Internetverbindung vorhanden ist. Sobald der Dienst wieder mit dem Internet verbunden ist, soll er die Anfragen an den entfernten Anwendungsserver übertragen. \\[10pt]
+\midrule
+\multicolumn{2}{p{\dimexpr\textwidth-2\tabcolsep\relax}}{\textbf{3. Anforderungen Push- und Notificationkomponente}} \\
+\midrule
+3.1 Anzeige von Benachrichtigung & ...soll Push-Benachrichtigungen bei Freundschaftsanfragen, Einladung zu einer Aufgabe und Änderungen an einer geteilten Aufgabe anzeigen. \\[6pt]
+3.2 Benachrichtigungen verarbeiten & ...soll eingehende GCM Push-Benachrichtigungen annehmen und entsprechend verarbeiten. \\[6pt]
+3.3 Push-Aktualisierung des Models & ...soll eingehende Push Nachrichten verarbeiten und daraufhin das vorgehaltene Datenmodell aktualisieren. Ggf. kann eine Benachrichtigung angezeigt werden (abhängig vom Push-Typ).\\[6pt]
+\bottomrule
+\caption{Anforderungen an nativen Android Dienst}
+\label{tbl_anforderungen-android}
+\end{longtable}
