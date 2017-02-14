@@ -1,13 +1,26 @@
 \chapter{Konzeption}
 \label{sec_konzeption}
 
-\section{Umsetzung mittels Serviceworker}
-\label{subsec_konzeption_serviceworker}
+\section{Caching der statische Resourcen}
 
-\subsection{Architekturbeschreibung}
-\label{subsubsec_konzeption_serviceworker_architektur}
+\section{Web Push}
+\label{subsubsec_konzeption_serviceworker_push-api}
 
-Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI Logik ist die gesamte Geschäftslogik auf einen dedizierten (Business-)Server ausgelagert. Dieser stellt ebenfalls die Datenbank bereit. Mittels AJAX und REST werden dynamische Daten vom Client beim Server angefragt.
+\begin{figure}[htp] \centering{
+\centering
+\includegraphics[width=0.9\textwidth]{images/architektur_serviceworker_push.pdf}}
+\caption{Push mittels Serviceworker (in Anlehnung an MozillaWiki \cite{MOZ_WIKI})}
+\quelle\url{https://wiki.mozilla.org/File:PushNotificationsHighLevel.png}
+\label{image_architektur-serviceworker-push}
+\end{figure}  
+
+... Beschreibung (mit Schema) der Softwarearchitektur ...
+
+
+\section{Architekturbeschreibung}
+\label{sec_konzeption_serviceworker_architektur}
+
+Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI- und Serviceworker-Logik ist die gesamte Geschäftslogik auf einen Business-Server (Applicationserver) ausgelagert. Die zentrale Datenbank sowie die statischen Ressourcen zur Darstellung des Client werden ebenfalls vom Applicationserver bereitgestellt. Für die Kommunikation steht eine RESTful-Schnittstelle zur Verfügung.
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/architektur_serviceworker.pdf}}
@@ -16,12 +29,16 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \end{figure} 
 
 \newpage
-\subsection{Applicationserver}
-\label{subsec_konzeption_applicationserver}
+\section{Applicationserver}
+\label{sec_konzeption_applicationserver}
 
-\subsubsection{REST-API}
+\subsection{Datenbank}
 
-Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server} Anforderungen an Serverkomponente) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_api-routes} dargestellt. \\
+
+
+\subsection{REST-API}
+
+Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server} Anforderungen an Serverkomponente) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_konzeption_rest} dargestellt. \\
 
 \begin{table}[h]
 \centering
@@ -36,17 +53,21 @@ Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methode
     /api/tasks/:taskId & GET & Gibt eine einzelne Aufgabe zurück \\
     /api/tasks/:taskId & PUT & Aktualisiert eine einzelne Aufgabe \\
     /api/tasks/:taskId & DELETE & Löscht eine einzelne Aufgabe \\
+    \hline
+    /push/devices & GET & Gibt alle registrierten Geräte zurück \\
+    /push/devices & POST & Registriert ein neues Gerät \\
 \end{tabular}
 \caption{Übersicht API Routen}
-\label{tbl_api-routes}
+\label{tbl_konzeption_rest}
 \end{table}
 
 \subsubsection{Authentifizierung und Autorisierung} 
 
 Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Autorisierung notwendig. Dazu wird das Token-Verfahren verwendet.
 
-\subsection{Client-Oberfläche}
-\label{subsec_konzeption_client-ui}
+\newpage
+\section{Client-Oberfläche}
+\label{sec_konzeption_client-ui}
 
 
 ... Mockup ... \\
@@ -54,50 +75,19 @@ Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Au
 
 Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\
 
-
-\subsection{Push und Notification API}
-\label{subsubsec_konzeption_serviceworker_push-api}
-
-\begin{figure}[htp] \centering{
-\centering
-\includegraphics[width=0.9\textwidth]{images/architektur_serviceworker_push.pdf}}
-\caption{Push mittels Serviceworker (in Anlehnung an MozillaWiki \cite{MOZ_WIKI})}
-\quelle\url{https://wiki.mozilla.org/File:PushNotificationsHighLevel.png}
-\label{image_architektur-serviceworker-push}
-\end{figure}  
-
-... Beschreibung (mit Schema) der Softwarearchitektur ...
-
 \newpage
-\section{Umsetzung mittels nativer Android Dienst}
-\label{subsec_konzeption_android}
+\section{Datenmodel}
+\label{sec_konzeption_datamodel}
 
-\subsection{Architekturbeschreibung}
-\label{subsubsec_konzeption_android_architektur}
-
-\begin{figure}[htp] \centering{
-\includegraphics[width=0.9\textwidth]{images/architektur_android.pdf}}
-\caption{Architektur - Umsetzung mit nativem Android Dienst }
-\label{image_architektur-android-push}
-\end{figure}  
-
-... Beschreibung (mit Schema) der Softwarearchitektur ...
-
-\newpage
-\subsection{Push}
-
-\begin{figure}[htp] \centering{
-\includegraphics[width=0.9\textwidth]{images/architektur_android_push.pdf}}
-\caption{Push mittels nativem Android Dienst (in Anlehnung an MozillaWiki \cite{MOZ_WIKI})}
-\quelle\url{https://wiki.mozilla.org/File:PushNotificationsHighLevel.png}
-\label{image_architektur-android-push}
-\end{figure}  
-
-\section{Datenmodell}
-\label{subsec_datenmodell}
+\subsection{Datenbankschema}
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/model.png}}
 \caption{Datenmodell}
 \label{image_konzeption_datenmodell}
 \end{figure} 
+
+
+\subsection{Bereitstellung der Daten}
+
+\newpage
