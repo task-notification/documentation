@@ -3,6 +3,31 @@
 
 \section{Caching der statische Resourcen}
 
+Tabelle zeigt die füng grundsätzlich möglichen Strategien für das Caching.
+
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\textwidth}{| l | X | }
+    \hline
+    \textbf{Bezeichnung} & \textbf{Beschreibung} \\
+    \hline
+    networkOnly & Ressourcen werden nur aus Netzwerk geholt \\
+    \hline    
+    cacheOnly & Ressourcen werden immer aus Cache geladen \\
+    \hline
+    fastest & Versucht von beiden Quellen zu laden und Antwortet mit schnellerem Response \\
+    \hline
+    networkFirst & Versucht zuerst aus dem Netzwerk zu laden und schaut in den Cache, wenn dies fehlschlägt \\
+    \hline
+    cacheFirst & Bezieht Ressourcen direkt aus dem Cache, fragt jedoch auch beim Netzwerk nach und aktualisiert bei Erfolg die Ressourcen im Cache \\
+    \hline
+\end{tabularx}
+\caption{Übersicht Caching Strategien}
+\label{tbl_konzeption_caching-strategien}
+\end{table}
+
+
 \section{Web Push}
 \label{subsubsec_konzeption_serviceworker_push-api}
 

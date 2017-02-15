@@ -133,9 +133,35 @@
 @Misc{MOZ_WIKI,
   author    = {Mozilla},
   title     = {Firefox/Push Notifications - MozillaWiki},
-  year      = {2016},
+  year      = {08.01.2017},
   timestamp = {08.01.2017},
   url       = {https://wiki.mozilla.org/Firefox/Push_Notifications},
+}
+
+@Misc{SW_COOKBOOK,
+  author    = {Mozilla},
+  title     = {Serviceworker Cookbook},
+  year      = {08.01.2017},
+  timestamp = {08.01.2017},
+  url       = {https://serviceworke.rs/},
+}
+
+@Misc{SW_NODEJS,
+  author    = {Raj Amal},
+  title     = {Creating a GCM Push Notification Server using Node.js and MongoDB},
+  year      = {01.05.2016},
+  owner     = {prmueller},
+  timestamp = {08.01.2017},
+  url       = {https://serviceworke.rs/},
+}
+
+@Misc{SW_BLOG,
+  author    = {Ire Aderinokun},
+  title     = {“Offline First” with Service Worker},
+  year      = {11.10.2016},
+  owner     = {prmueller},
+  timestamp = {08.01.2017},
+  url       = {https://bitsofco.de/bitsofcode-pwa-part-1-offline-first-with-service-worker/},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

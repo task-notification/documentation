@@ -6,40 +6,19 @@ Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlege
 Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH"=Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH"=Notification angezeigt sobald die Aufgabe terminiert.
 
 \newpage
-\section{Anforderung an Web Applikation}
-\subsection{funktionale Anforderungen}
+\section{funktionale Anforderungen}
+\label{sec_anforderungen_funktionale-anforderungen}
 
-\paragraph{[WFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
+Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenigen verstanden, welche zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
 
-\paragraph{[WFA-2] Kontaktliste.} Benutzer können sich untereinander mittels Benutzername bzw. E"~Mail Adresse zur persönlichen Kontaktliste hinzufügen.
+...weiter ausführen...
 
-\paragraph{[WFA-3] Gruppen verwalten. } Benutzer können Gruppen anlegen und andere Benutzer hinzufügen. Ein Gruppenadministrator kann die Gruppe bearbeiten oder löschen. Benutzer können aus einer Gruppe austreten.
+\paragraph{[FA-1] Single Page Application}\label{fa-1}
+\paragraph{[FA-2] Offlinefähigkeit}\label{fa-2} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die hybride Webanwendung Mechanismen zum Vorhalten der persistenten Daten und des nutzerspezifischen Datenmodells im Offlinezustand. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
 
-\paragraph{[WFA-4] Aufgaben anlegen, bearbeiten und löschen.} Ein Benutzer soll Aufgaben anlegen und anschließend Bearbeiten oder Löschen können.
-Eine Aufgabe muss einen Titel besitzen. Optional können eine Beschreibung, ein Ort, Zeitraum sowie Fälligkeitsdatum hinterlegt werden.
+\paragraph{[FA-3] Push-Benachrichtigungen}\label{fa-3} Benutzer der Webanwendung werden unabhängig vom verwendeten Endgerät über bestimmte Ereignisse mit Hilfe von Push"=Benachrichtigungen informiert. Diese Ereignisse werden vom Applicationserver verarbeitet und dieser initiiert Push"=Benachrichtigungen beim Client. 
 
-\paragraph{[WFA-5] Aufgaben teilen.} Aufgaben können mit mehreren Benutzer geteilt werden. Ebenfalls können Aufgaben einer Gruppe zugeordnet werden. 
-
-\paragraph{[WFA-6] Benachrichtigungen.} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
-Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
-
-\newpage
-\subsection{nicht-funktionale Anforderungen}
-
-\paragraph{[WNFA-1] Singlepage Applikation.}
-
-\paragraph{[WNFA-2] Offlinefähigkeit.}
-
-\paragraph{[WNFA-3] Look and Feel einer nativen Android App.}\label{par_wnfa3}
-
-
-\newpage
-\section{Anforderungen an Serverkomponente}
-\label{subsec_anforderungen_server}
-
-\subsection{funktionale Anforderungen}
-
-\paragraph{[SFA-1] RESTful-Schnittstelle. }Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful-Schnittstelle zu erfüllen:
+\paragraph{[FA-4] Schnittstelle für Kommunikation mit Applicationserver}\label{fa-4} Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful"=Schnittstelle zu erfüllen:
 
 \begin{itemize}  
 \item Bereitstellung von CRUD\footnote{\textit{CRUD: create, read, update, delete}}-Funktionalität für Entities
@@ -49,9 +28,32 @@ Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben
 \item alle Requests werden auf der Konsole ausgegeben
 \end{itemize}
 
-
-\paragraph{[SFA-2] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet. \\
-\textbf{KONZEPT TOKEN BESCHREIBEN}
-
 \newpage
-\subsection{nicht-funktionale Anforderungen}
+\section{nicht-funktionale Anforderungen}
+\label{sec_anforderungen_nicht-funktionale-anforderungen}
+
+Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen diejenigen verstanden, welche nicht zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
+
+...weiter ausführen...
+
+\paragraph{[NFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
+
+\paragraph{[NFA-2] Kontaktliste.}\label{fa-2} Benutzer können sich untereinander mittels Benutzername bzw. E"~Mail Adresse zur persönlichen Kontaktliste hinzufügen.
+
+\paragraph{[NFA-3] Gruppen verwalten. }\label{fa-3} Benutzer können Gruppen anlegen und andere Benutzer hinzufügen. Ein Gruppenadministrator kann die Gruppe bearbeiten oder löschen. Benutzer können aus einer Gruppe austreten.
+
+\paragraph{[NFA-4] Aufgaben anlegen, bearbeiten und löschen.}\label{fa-4} Ein Benutzer soll Aufgaben anlegen und anschließend Bearbeiten oder Löschen können.
+Eine Aufgabe muss einen Titel besitzen. Optional können eine Beschreibung, ein Ort, Zeitraum sowie Fälligkeitsdatum hinterlegt werden.
+
+\paragraph{[NFA-5] Aufgaben teilen.} \label{fa-5} Aufgaben können mit mehreren Benutzer geteilt werden. Ebenfalls können Aufgaben einer Gruppe zugeordnet werden. 
+
+\paragraph{[NFA-8] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet. \\
+
+\paragraph{[NFA-9] Ereignisse für Benachrichtigungen.}\label{nfa-9} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
+Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
+\begin{itemize}
+\item Freundschaftsanfrage wurde von einem anderen Benutzer gestellt
+\item Freundschaftsanfrage wurde durch einen anderen Benutzer bestätigt/abgelehnt
+\item ein anderer Benutzer hat die eigene Freundschaftsanfrage bestätigt/abgelehnt
+\end{itemize}
+
