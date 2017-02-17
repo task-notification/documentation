@@ -11,7 +11,7 @@ Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlege
 
 Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenigen verstanden, welche zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
 
-...weiter ausführen...
+\todo{weiter ausführen\ldots}
 
 \paragraph{[FA-1] Single Page Application}\label{fa-1}
 \paragraph{[FA-2] Offlinefähigkeit}\label{fa-2} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die hybride Webanwendung Mechanismen zum Vorhalten der persistenten Daten und des nutzerspezifischen Datenmodells im Offlinezustand. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
@@ -20,13 +20,15 @@ Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenige
 
 \paragraph{[FA-4] Schnittstelle für Kommunikation mit Applicationserver}\label{fa-4} Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful"=Schnittstelle zu erfüllen:
 
-\begin{itemize}  
+\begin{itemize}
+\setlength{\itemsep}{0pt}%
+\setlength{\parskip}{0pt}%
 \item Bereitstellung von CRUD\footnote{\textit{CRUD: create, read, update, delete}}-Funktionalität für Entities
 \item Aufruf von Ressourcen über eindeutige und einfache URLs (z.B. \url{https://example.de/api/task/} und \url{https://example.de/api/task/:taskId}) 
 \item Verwendung der standardisierten HTTP-Methoden (GET, POST, PUT und DELETE) 
 \item Rückgabe im JSON-Format
 \item alle Requests werden auf der Konsole ausgegeben
-\end{itemize}
+\end{itemize}  
 
 \newpage
 \section{nicht-funktionale Anforderungen}
@@ -34,7 +36,7 @@ Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenige
 
 Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen diejenigen verstanden, welche nicht zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
 
-...weiter ausführen...
+\todo{weiter ausführen...}
 
 \paragraph{[NFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
 
@@ -51,9 +53,15 @@ Eine Aufgabe muss einen Titel besitzen. Optional können eine Beschreibung, ein 
 
 \paragraph{[NFA-9] Ereignisse für Benachrichtigungen.}\label{nfa-9} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
 Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
+
 \begin{itemize}
+\setlength{\itemsep}{0pt}%
+\setlength{\parskip}{0pt}%
 \item Freundschaftsanfrage wurde von einem anderen Benutzer gestellt
 \item Freundschaftsanfrage wurde durch einen anderen Benutzer bestätigt/abgelehnt
 \item ein anderer Benutzer hat die eigene Freundschaftsanfrage bestätigt/abgelehnt
+\item Einladung zu einer Aufgabe durch einen anderen Benutzer
+\item Bestätigung/Ablehnung durch einen Benutzer auf eine Einladung zu einer Aufgabe
+\item Änderungen an einer Aufgabe, an welcher der Benutzer beteiligt ist
 \end{itemize}
 

@@ -2,24 +2,34 @@
 
 ... Wie wurden die beiden Ideen umgesetzt ...
 
-\section{Serverkomponente}
-
-\section{Umsetzung ServiceWorker}
-
 ... Umsetzung mittels ServiceWorker ...
-
-\section{Umsetzung mittels nativem Android Service}
 
 ... Umsetzung mittels eigenem nativen Service ...
 
 \begin{lstlisting}
-// Hello.java
-import javax.swing.JApplet;
-import java.awt.Graphics;
+// /js/app.js
+if ('serviceWorker' in navigator)
+{
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
 
-public class Hello extends JApplet {
-    public void paintComponent(Graphics g) {
-        g.drawString("Hello, world!", 65, 95);
-    }    
+        if(reg.installing)
+        {
+            console.log('Service worker installing');
+        } 
+        else if(reg.waiting)
+        {
+            console.log('Service worker installed');
+        } 
+        else if(reg.active)
+        {
+            console.log('Service worker active');
+        }
+
+    }).catch(function(error)
+    {
+        // registration failed
+        console.log('Registration failed with ' + error);
+    });
 }
+\caption{Einrichtung Serice Worker}
 \end{lstlisting}

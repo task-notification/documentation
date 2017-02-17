@@ -1,10 +1,17 @@
 \chapter{Konzeption}
 \label{sec_konzeption}
 
-\section{Caching der statische Resourcen}
+\section{Offlinefähigkeit}
+\label{sec_konzeption_offline}
 
-Tabelle zeigt die füng grundsätzlich möglichen Strategien für das Caching.
+\subsection{Caching statischer Ressourcen}
+\label{subsec_konzept_caching-statische-ressourcen}
 
+Während Webanwendungen einen Fehler anzeigen, sobald der Benutzer ohne aktive Internetverbindung versucht zu einer Seite zu navigieren, ist es in nativen Apps möglich sich weiter innerhalb der Anwendung zu bewegen. 
+
+Eine hybride Webanwendung muss also die Möglichkeit haben, zu erkennen, ob eine Internetverbindung vorhanden ist oder nicht und entsprechend reagieren. Hier kommt die Service Worker API ins Spiel. Hauptaugenmerkt der Technologie ist die Bereitstellung einer optimalen Offline"=Benutzererfahrung.   
+
+Wie in \todo{Hier muss die Referenz hin} beschrieben handelt es sich beim Service Worker um eine Art Proxy zwischen der Webanwendung und dem Browser. Dadurch ist es möglich, Responses von HTTP-Request aufzunehmen und anzupassen. Dies ist eine Schlüsselfunktion, um Offlinefähigkeit anbieten zu können.
 
 \begin{table}[h]
 \centering
@@ -27,7 +34,22 @@ Tabelle zeigt die füng grundsätzlich möglichen Strategien für das Caching.
 \label{tbl_konzeption_caching-strategien}
 \end{table}
 
+Tabelle \ref{tbl_konzeption_caching-strategien} zeigt die fünf grundsätzlich möglichen Strategien für das Caching von statischen Ressourcen, die mit Hilfe des Service Workers umgesetzt werden können. Damit die Benutzung der Anwendung auch ohne aktive Internetverbindung gewährleistet ist, müssen die Ressourcen ebenfalls bereitstehen, wenn das Gerät offline ist. Dadurch das erkannt werden kann, ob das Gerät vom Internet getrennt ist und dadurch anders auf HTTP-Requests reqgieren werden kann, ergibt sich die Möglichkeit, Ressourcen auszuliefern, die lokal gespeichert sind.
 
+Für den vorliegenden An \code{cacheFirst}-Verfahren bietet sich für die vorligenden Anwendungsfall an. Die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend wird versucht, ob dieses mit Ressourcen aus dem Internet aktualisiert werden können(vgl. Bild \ref{image_konzept_caching-strategie}. Dadurch wird die Seite unabhängig vom Onlinezustand bei Anforderung schnell geladen.
+
+\begin{figure}[htp] \centering{
+\includegraphics[width=0.9\textwidth]{images/konzept_cache.pdf}}
+\caption{Caching Strategie}
+\label{image_konzept_caching-strategie}
+\end{figure} 
+
+\subsection{Caching des anwendungspezifischen Modells}
+\label{subsec_konzeption_caching-modell}
+
+Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die hybride Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
+
+\newpage
 \section{Web Push}
 \label{subsubsec_konzeption_serviceworker_push-api}
 
@@ -39,9 +61,10 @@ Tabelle zeigt die füng grundsätzlich möglichen Strategien für das Caching.
 \label{image_architektur-serviceworker-push}
 \end{figure}  
 
-... Beschreibung (mit Schema) der Softwarearchitektur ...
 
+\todo{Beschreibung (mit Schema) der Softwarearchitektur ...}
 
+\newpage
 \section{Architekturbeschreibung}
 \label{sec_konzeption_serviceworker_architektur}
 
@@ -104,15 +127,8 @@ Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Fr
 \section{Datenmodel}
 \label{sec_konzeption_datamodel}
 
-\subsection{Datenbankschema}
-
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/model.png}}
 \caption{Datenmodell}
 \label{image_konzeption_datenmodell}
 \end{figure} 
-
-
-\subsection{Bereitstellung der Daten}
-
-\newpage
