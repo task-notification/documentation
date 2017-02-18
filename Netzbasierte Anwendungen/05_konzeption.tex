@@ -74,7 +74,7 @@ Jedes Abonnement für einen Service-Worker ist eindeutig. Der Endpoint für das 
 
 Abbildung \ref{image_architektur-serviceworker-push} zeigt den grundsätzlichen Ablauf von Registrierung des Push"=Managers, über die Übertragung der Endpointinformationen bis hin zum Versand von Push"=Nachrichten.
 
-Zuerst  muss der Nutzer der Web-App auf eine Anforderung für Webbenachrichtigungen oder sonstige verwendete Berechtigungen reagieren, indem er der App die Berechtigungen erteilt  (siehe Bild). \\
+Zuerst  muss der Nutzer der Web-App auf eine Anforderung für Webbenachrichtigungen oder sonstige verwendete Berechtigungen reagieren, indem er der App die Berechtigungen erteilt\todo{Bild hinzufügen}. \\
 Nachdem die Berechtigung erfolgt ist, wird der Service Worker, lokal  für die Webanwendung registriert. 
 Danach wird der Push"=Messaging"=Service, in unserem Fall „Firebase Cloud Messaging“ (kurz FCM) mit der Funktion \code{PushManager.subscribe()} abonniert. 
 
@@ -150,6 +150,13 @@ Wird eine REST-Route ohne Authorization aufgerufen, antwortet der Server mit ein
 \label{sec_konzeption_datamodel}
 
 
+Zur Speicherung der Benutzerinformationen ist die User-Entity notwendig. Neben den Anmeldeinformationen (Benutzername und Passwort) wird für jeden Benutzer eine E-Mail"=Adresse hinterlegt. 
+
+Jeder Benutzer kann mehrere Aufgaben anlegen. Zu diesen Aufgaben können ein Titel, Beschreibung sowie ein Datum hinterlegt werden. Weiterhin können weitere Benutzer zu einer Aufgabe hinzugefügt werden. Dabei ist ein Benutzer immer "Eigentümer" während die anderen Benutzer als "Teilnehmer" agieren.
+
+Zur Abbildung von Freundschaftsbeziehungen ist eine n:m-Beziehung zwischen User und User notwendig. Zu dieser Beziehung werden noch weitere Attribute wie "Anfrage gestellt am", "Bestätigt" und "Abgelehnt" hinzugefügt.
+
+Damit Benutzer unabhängig vom verwendeten Endgerät über Push"=Nachrichten benachrichtigt werden können, muss für einen Benutzer mindesten ein Gerät mit zugehöriger Push"=Subscription"=ID und Endpoint angelegt werden. Somit ist es möglich, dass ein Benutzer auf verschiedenen Endgeräten die selben Push"=Benachrichtigungen angezeigt zu bekommen.
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/model.png}}
@@ -162,7 +169,7 @@ Wird eine REST-Route ohne Authorization aufgerufen, antwortet der Server mit ein
 \label{sec_konzeption_client-ui}
 
 
-... Mockup ... \\
-... Beschreibung des UI ...\\
+\todo{Mockup}
+\todo{Beschreibung des UI ...}
 
 Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\

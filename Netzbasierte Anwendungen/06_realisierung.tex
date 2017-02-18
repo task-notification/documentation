@@ -1,10 +1,17 @@
 \chapter{Implementierung}
 
-... Wie wurden die beiden Ideen umgesetzt ...
+\section{Applicationserver}
 
-... Umsetzung mittels ServiceWorker ...
+\subsection{Datenbank}
 
-... Umsetzung mittels eigenem nativen Service ...
+\subsection{REST-Schnittstelle}
+
+\section{Serviceworker}
+
+\subsection{Caching der statischen Ressourcen}
+
+\subsection{Push-Notification}
+
 
 \begin{lstlisting}
 // /js/app.js
@@ -31,5 +38,6 @@ if ('serviceWorker' in navigator)
         console.log('Registration failed with ' + error);
     });
 }
+
 \caption{Einrichtung Serice Worker}
 \end{lstlisting}
