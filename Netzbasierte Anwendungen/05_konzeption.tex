@@ -11,7 +11,7 @@ Während Webanwendungen einen Fehler anzeigen, sobald der Benutzer ohne aktive I
 
 Eine hybride Webanwendung muss also die Möglichkeit haben, zu erkennen, ob eine Internetverbindung vorhanden ist oder nicht und entsprechend reagieren. Hier kommt die Service Worker API ins Spiel. Hauptaugenmerkt der Technologie ist die Bereitstellung einer optimalen Offline"=Benutzererfahrung.   
 
-Wie in \todo{Hier muss die Referenz hin} beschrieben handelt es sich beim Service Worker um eine Art Proxy zwischen der Webanwendung und dem Browser. Dadurch ist es möglich, Responses von HTTP-Request aufzunehmen und anzupassen. Dies ist eine Schlüsselfunktion, um Offlinefähigkeit anbieten zu können.
+Wie in Abschnitt \ref{sec_grundladge_serviceworker} beschrieben handelt es sich beim Service Worker um eine Art Proxy zwischen der Webanwendung und dem Browser. Dadurch ist es möglich, Responses von HTTP-Request aufzunehmen und anzupassen. Dies ist eine Schlüsselfunktion, um Offlinefähigkeit bieten zu können.
 
 \begin{table}[h]
 \centering
@@ -39,7 +39,7 @@ Tabelle \ref{tbl_konzeption_caching-strategien} zeigt die fünf grundsätzlich m
 Für den vorliegenden An \code{cacheFirst}-Verfahren bietet sich für die vorligenden Anwendungsfall an. Die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend wird versucht, ob dieses mit Ressourcen aus dem Internet aktualisiert werden können(vgl. Bild \ref{image_konzept_caching-strategie}. Dadurch wird die Seite unabhängig vom Onlinezustand bei Anforderung schnell geladen.
 
 \begin{figure}[htp] \centering{
-\includegraphics[width=0.9\textwidth]{images/konzept_cache.pdf}}
+\includegraphics[width=0.9\textwidth]{images/konzept_cache.png}}
 \caption{Caching Strategie}
 \label{image_konzept_caching-strategie}
 \end{figure} 
@@ -53,16 +53,44 @@ Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschri
 \section{Web Push}
 \label{subsubsec_konzeption_serviceworker_push-api}
 
+Die Push-API bietet Webanwendungen die Möglichkeit, von einem Server gesendete Nachrichten zu empfangen, unabhängig davon, ob die Webanwendung im Vordergrund oder sogar aktuell geladen ist. \\
+Damit eine App, Push-Nachrichten empfangen kann, muss sie einen aktiven Service-Worker haben. Wenn der Service-Worker aktiv ist, kann er Push"=Benachrichtigungen über seinen internen Push"=Manager (\code{PushManager.subscribe()}) abonnieren.
+
+Die resultierende \code{PushSubscription} enthält alle Informationen, die die Anwendung benötigt, um eine Push"=Nachricht zu senden: einen Endpoint und den für das Senden von Daten erforderlichen Verschlüsselungsschlüssel.
+
+Der Service-Worker wird nach Bedarf gestartet, um eingehende Push"=Nachrichten zu behandeln, die an den \code{ServiceWorkerGlobalScope.onpush()}- Eventhandler übergeben werden. Dies ermöglicht es Webanwendungen, auf empfangene Push"=Nachrichten, beispielsweise durch Anzeigen einer Benachrichtigung zu reagieren. Für die Anzeige für Benachrichtigungen aus dem Service Worker heraus, wird laut Standard die Methode \code{ServiceWorkerRegistration.showNotification()} bereitgestellt.
+
+Jedes Abonnement für einen Service-Worker ist eindeutig. Der Endpoint für das Abonnement ist eine eindeutige URL. Die Kenntnis des Endpoints ist alles, was notwendig ist, um eine Nachricht an die Anwendung zu senden. Die Endpoint-URL muss daher geheim gehalten werden, oder andere Anwendungen könnten Push-Nachrichten an die Anwendung senden.
+
+\subsection{Ablauf}
+
 \begin{figure}[htp] \centering{
 \centering
 \includegraphics[width=0.9\textwidth]{images/architektur_serviceworker_push.pdf}}
 \caption{Push mittels Serviceworker (in Anlehnung an MozillaWiki \cite{MOZ_WIKI})}
 \quelle\url{https://wiki.mozilla.org/File:PushNotificationsHighLevel.png}
 \label{image_architektur-serviceworker-push}
-\end{figure}  
+\end{figure} 
 
+Abbildung \ref{image_architektur-serviceworker-push} zeigt den grundsätzlichen Ablauf von Registrierung des Push"=Managers, über die Übertragung der Endpointinformationen bis hin zum Versand von Push"=Nachrichten.
 
-\todo{Beschreibung (mit Schema) der Softwarearchitektur ...}
+Zuerst  muss der Nutzer der Web-App auf eine Anforderung für Webbenachrichtigungen oder sonstige verwendete Berechtigungen reagieren, indem er der App die Berechtigungen erteilt  (siehe Bild). \\
+Nachdem die Berechtigung erfolgt ist, wird der Service Worker, lokal  für die Webanwendung registriert. 
+Danach wird der Push"=Messaging"=Service, in unserem Fall „Firebase Cloud Messaging“ (kurz FCM) mit der Funktion \code{PushManager.subscribe()} abonniert. 
+
+Mit Hilfe von \code{PushSubscription.endpoint} kann der mit der Subscription verknüpfte Endpoint abgerufen werden. Die Details werden an den Applicationserver gesendet, so dass er Push"=Nachrichten senden kann, wenn dies erforderlich ist. Die Subscription-ID wird aus dem kompletten Endpoint entnommen. 
+
+Auf Serverseite wird der Endpoint und alle erforderlichen Details, wie die Sender ID und Geräte ID in der Datenbank gespeichert, so dass sie verfügbar sind, wenn eine Push"=Nachricht an einen Benutzer bzw. ein Endgerät gesendet werden soll. 
+
+Um eine Push"=Nachricht zu senden, muss ein HTTP-POST an die Endpoint"=URL gesendet werden. Die Anforderung muss einen TTL-Header enthalten, der begrenzt, wie lange die Nachricht in der Warteschlange stehen soll, wenn der Benutzer nicht online ist.  
+
+Um Nutzdaten in die Anfrage einzubinden, müssen diese verschlüsselt werden (mit dem öffentlichen Schlüssel des Clients (public key)).
+Da wir uns gegen eine Nutzdatensendung über den Browseranbieter entschieden haben, entfällt bei uns dieser Schritt. 
+
+Sobald die Push"=Nachricht vom Web Push Server erfolgreich versendet wurde, antwortet dieser mit einem Response, welcher eine eindeutige Message ID enthält. Diese referenziert auf eine bestimmte Push"=Benachrichtigung.
+
+Den vom Applicationserver zuvor generierten Nutzdaten (Payload) wird diese Message ID zugeordnet und auf für Clientanfragen vorgehalten. \\
+Sobald eine Push"=Nachricht vom Client empfangen wird, löst dies ein onPush"=Event aus. Der Event-Listener reagiert mit einer direkten Anfrage beim Applicationserver und fragt ggf. vorhandenen Payload für die aktuelle Message ID ab.
 
 \newpage
 \section{Architekturbeschreibung}
@@ -80,13 +108,15 @@ Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client ledi
 \section{Applicationserver}
 \label{sec_konzeption_applicationserver}
 
+Für die Bereitstellung der Geschäftslogik wird ein eigener Applicationserver benötigt. Als Plattform soll Node.js eingesetzt werden. Dadurch ist es mit überschaubarem Aufwand möglich, einfache Webanwendungen zu erstellen. Die Implementierung einer RESTful-Schnittstelle ist ebenso problemlos möglich wie die Anbindung von ORM-Tools für die Kommunikation mit einer Datenbank. 
+
 \subsection{Datenbank}
 
-
+Der Applicationserver stellt ebenfalls die Datenbank zur Verfügung und Verwaltet deren Zugriffe. Als Datenbank soll eine noSQL-Datenbank-Technologie verwendet werden. Diese ermöglicht eine objektorientierte Speicherung der Daten bei maximaler Flexibilität des Schemas. Node.js unterstützt die Anbindung sowohl von MongoDB als auch CouchDB. Wie in Abschnitt \ref{sec_implementierung_mongodb} beschrieben wird für das Projekt die MongoDB-Implementierung verwendet.
 
 \subsection{REST-API}
 
-Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server} Anforderungen an Serverkomponente) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_konzeption_rest} dargestellt. \\
+Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server}) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_konzeption_rest} dargestellt. 
 
 \begin{table}[h]
 \centering
@@ -104,6 +134,7 @@ Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methode
     \hline
     /push/devices & GET & Gibt alle registrierten Geräte zurück \\
     /push/devices & POST & Registriert ein neues Gerät \\
+    /push/payload/:messageId & GET & Gibt den Payload für MessageId zurück \\
 \end{tabular}
 \caption{Übersicht API Routen}
 \label{tbl_konzeption_rest}
@@ -111,7 +142,20 @@ Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methode
 
 \subsubsection{Authentifizierung und Autorisierung} 
 
-Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Autorisierung notwendig. Dazu wird das Token-Verfahren verwendet.
+Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Autorisierung notwendig. Registrierte Benutzer authentifizieren sich mittels Benutzername und Passwort über die Route \url{/api/authenticate} am Applicationserver. \\
+Die notwendigen Parameter müssen im Request"=Body übertragen werden. Bei erfolgreicher Authentifizierung antwortet der Server mit einem Token innerhalb des Response"=Body. Allen weiteren Requests wird der Security"=Token als \code{Authorization}"=Header oder Body"=Parameter hinzugefügt. \\
+Wird eine REST-Route ohne Authorization aufgerufen, antwortet der Server mit einem \code{HTTP 401}"=Response und signalisiert damit, dass eine Authentifizierung erforderlich ist. 
+
+\section{Datenmodel}
+\label{sec_konzeption_datamodel}
+
+
+
+\begin{figure}[htp] \centering{
+\includegraphics[width=0.9\textwidth]{images/model.png}}
+\caption{Datenmodell}
+\label{image_konzeption_datenmodell}
+\end{figure} 
 
 \newpage
 \section{Client-Oberfläche}
@@ -122,13 +166,3 @@ Für den Zugriff auf die CRUD-Methoden ist eine Benutzerauthentifizierung und Au
 ... Beschreibung des UI ...\\
 
 Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\
-
-\newpage
-\section{Datenmodel}
-\label{sec_konzeption_datamodel}
-
-\begin{figure}[htp] \centering{
-\includegraphics[width=0.9\textwidth]{images/model.png}}
-\caption{Datenmodell}
-\label{image_konzeption_datenmodell}
-\end{figure} 
