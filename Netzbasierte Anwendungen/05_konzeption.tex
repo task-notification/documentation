@@ -4,16 +4,23 @@
 \section{Offlinefähigkeit}
 \label{sec_konzeption_offline}
 
+Konventionelle Webanwendungen benötigen eine dauerhafte Verbindung zum einem Webserver, um Ressourcen abzufragen. Selbst bei kurzen Verbindungsabbrüchen ist eine Arbeit mit solchen Anwendung unmöglich und in vielen Szenarien nicht akzeptabel. In den folgenden Abschnitten \ref{subsec_konzept_caching-statische-ressourcen} und \ref{subsec_konzeption_caching-modell} werden Methoden beschrieben, um dieses Problem zu lösen und die Benutzererfahrung, durch Offlinefähigkeit einer Webanwendung, zu verbessern. 
+
+Grundsätzlich kommen für das vorliegende Szenario zwei Varianten der Offlinefähigkeit in Frage. Die Variante \textbf{Überwindung von kurzen Verbindungsabbrüchen} sorgt dafür, dass die Anwendung trotz kurzfristiger Verbindungsabbrüche weiter reagiert. Die Anwendung kann die Verbindung beispielsweise wiederherstellen, jedoch kommt bei dieser Variante keine lokale Persistenz von Daten und Synchronisation mit dem Server zum Einsatz. 
+
+Bei \textbf{\glqq{}echter\grqq{} Offlinefähigkeit} hingegen ist die Webanwendung auch ohne eine Internetverbindung funktionsfähig. Benutzer können nicht nur Daten anzeigen, sondern auch hinzufügen oder löschen. Dies wird durch eine lokale Zwischenspeicherung des benutzerspezifischen Anwendungsmodels (\glqq{}Application State\grqq{}) und dessen Synchronisation mit dem Applicationserver im Onlinezustand erreicht. Der Benutzer kann so kontinuierlich mit der Webanwendung arbeiten, ohne darauf achten zu müssen, ob er mit dem Internet verbunden ist oder nicht. \\
+Zur Erfüllung der in Anforderung [FA-3] (vgl. Abschnitt \ref{sec_anforderungen_funktionale-anforderungen}) beschriebenen Offlinefähigkeit wird diese Variante bevorzugt.
+
 \subsection{Caching statischer Ressourcen}
 \label{subsec_konzept_caching-statische-ressourcen}
 
-Während Webanwendungen einen Fehler anzeigen, sobald der Benutzer ohne aktive Internetverbindung versucht zu einer Seite zu navigieren, ist es in nativen Apps möglich sich weiter innerhalb der Anwendung zu bewegen. 
+Während Webanwendungen einen Fehler anzeigen und eine weitere Verwendung unmöglich machen, sobald der Benutzer ohne aktive Internetverbindung versucht zu einer Seite zu navigieren, ist es in nativen Apps möglich sich weiter innerhalb der Anwendung zu bewegen. \\
+Eine hybride Webanwendung muss also die Möglichkeit bieten, zu erkennen, ob eine aktive Internetverbindung vorhanden ist oder nicht und entsprechend darauf reagieren. Hier kommt die Service Worker API ins Spiel. Diese Technologie bietet Entwicklern die Möglichkeit einer optimalen Bereitstellung von Offline"=Benutzererfahrung.   
 
-Eine hybride Webanwendung muss also die Möglichkeit haben, zu erkennen, ob eine Internetverbindung vorhanden ist oder nicht und entsprechend reagieren. Hier kommt die Service Worker API ins Spiel. Hauptaugenmerkt der Technologie ist die Bereitstellung einer optimalen Offline"=Benutzererfahrung.   
-
-Wie in Abschnitt \ref{sec_grundladge_serviceworker} beschrieben handelt es sich beim Service Worker um eine Art Proxy zwischen der Webanwendung und dem Browser. Dadurch ist es möglich, Responses von HTTP-Request aufzunehmen und anzupassen. Dies ist eine Schlüsselfunktion, um Offlinefähigkeit bieten zu können.
+Wie in Abschnitt \ref{sec_grundladge_serviceworker} beschrieben handelt es sich beim Service Worker um eine Art Proxy zwischen der Webanwendung und dem Browser. Dadurch ist es möglich, Responses von HTTP-Request aufzunehmen, zu analysieren und ggf. anzupassen. Die Erkennung, ob ein Benutzer offline ist, ermöglicht es unterschiedlich auf einen HTTP"=Request zu reagieren. Dies ist eine Schlüsselfunktion, um die Anforderungen an Offlinefähigkeit erfüllen zu können.\\
 
 \begin{table}[h]
+\def\arraystretch{1.5}%  1 is the default, change whatever you need
 \centering
 \begin{tabularx}{\textwidth}{| l | X | }
     \hline
@@ -34,17 +41,17 @@ Wie in Abschnitt \ref{sec_grundladge_serviceworker} beschrieben handelt es sich 
 \label{tbl_konzeption_caching-strategien}
 \end{table}
 
-Tabelle \ref{tbl_konzeption_caching-strategien} zeigt die fünf grundsätzlich möglichen Strategien für das Caching von statischen Ressourcen, die mit Hilfe des Service Workers umgesetzt werden können. Damit die Benutzung der Anwendung auch ohne aktive Internetverbindung gewährleistet ist, müssen die Ressourcen ebenfalls bereitstehen, wenn das Gerät offline ist. Dadurch das erkannt werden kann, ob das Gerät vom Internet getrennt ist und dadurch anders auf HTTP-Requests reqgieren werden kann, ergibt sich die Möglichkeit, Ressourcen auszuliefern, die lokal gespeichert sind.
-
-Für den vorliegenden An \code{cacheFirst}-Verfahren bietet sich für die vorligenden Anwendungsfall an. Die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend wird versucht, ob dieses mit Ressourcen aus dem Internet aktualisiert werden können(vgl. Bild \ref{image_konzept_caching-strategie}. Dadurch wird die Seite unabhängig vom Onlinezustand bei Anforderung schnell geladen.
+Tabelle \ref{tbl_konzeption_caching-strategien} zeigt die fünf grundsätzlich möglichen Strategien für das Caching von statischen Ressourcen, die mit Hilfe des Service Workers umgesetzt werden können. Damit die Benutzung der Anwendung auch ohne aktive Internetverbindung gewährleistet ist, müssen die Ressourcen ebenfalls bereitstehen, wenn das Gerät offline ist. Der HTTP"=Response muss also lokal gespeicherte Ressourcen ausliefern, wenn diese nicht über das Netzwerk bezogen werden können. \\
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/konzept_cache.png}}
-\caption{Caching Strategie}
+\caption{Caching Strategie \code{cacheFirst}}
 \label{image_konzept_caching-strategie}
 \end{figure} 
 
-\subsection{Caching des anwendungspezifischen Modells}
+Das \code{cacheFirst}-Verfahren bietet sich für den vorliegenden Anwendungsfall an; die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend versucht, diese im Hintergrund mit Ressourcen aus dem Internet zu aktualisieren (vgl. Abbildung \ref{image_konzept_caching-strategie}). Dadurch wird die Seite unabhängig vom Onlinezustand bei Anforderung schnell geladen und dem Benutzer eine optimale Offline-Benutzererfahrung ermöglicht.
+
+\subsection{lokale peristente Speicherung und Synchronisation des Application State}
 \label{subsec_konzeption_caching-modell}
 
 Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die hybride Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
@@ -53,14 +60,15 @@ Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschri
 \section{Web Push}
 \label{subsubsec_konzeption_serviceworker_push-api}
 
-Die Push-API bietet Webanwendungen die Möglichkeit, von einem Server gesendete Nachrichten zu empfangen, unabhängig davon, ob die Webanwendung im Vordergrund oder sogar aktuell geladen ist. \\
+Die Push"=API bietet Webanwendungen die Möglichkeit, von einem Server gesendete Nachrichten zu empfangen, unabhängig davon, ob die Webanwendung im Vordergrund oder sogar aktuell geladen ist. \\
 Damit eine App, Push-Nachrichten empfangen kann, muss sie einen aktiven Service-Worker haben. Wenn der Service-Worker aktiv ist, kann er Push"=Benachrichtigungen über seinen internen Push"=Manager (\code{PushManager.subscribe()}) abonnieren.
 
 Die resultierende \code{PushSubscription} enthält alle Informationen, die die Anwendung benötigt, um eine Push"=Nachricht zu senden: einen Endpoint und den für das Senden von Daten erforderlichen Verschlüsselungsschlüssel.
 
-Der Service-Worker wird nach Bedarf gestartet, um eingehende Push"=Nachrichten zu behandeln, die an den \code{ServiceWorkerGlobalScope.onpush()}- Eventhandler übergeben werden. Dies ermöglicht es Webanwendungen, auf empfangene Push"=Nachrichten, beispielsweise durch Anzeigen einer Benachrichtigung zu reagieren. Für die Anzeige für Benachrichtigungen aus dem Service Worker heraus, wird laut Standard die Methode \code{ServiceWorkerRegistration.showNotification()} bereitgestellt.
+Der Service-Worker wird nach Bedarf gestartet, um eingehende Push"=Nachrichten zu behandeln, die an den \code{ServiceWorkerGlobalScope.onpush()}- Eventhandler übergeben werden. Dies ermöglicht es Webanwendungen, auf empfangene Push"=Nachrichten, beispielsweise durch Anzeigen einer Benachrichtigung zu reagieren. \\
+Für die Anzeige für Benachrichtigungen aus dem Service Worker heraus, wird laut Standard die Methode \code{ServiceWorkerRegistration.showNotification()} bereitgestellt.
 
-Jedes Abonnement für einen Service-Worker ist eindeutig. Der Endpoint für das Abonnement ist eine eindeutige URL. Die Kenntnis des Endpoints ist alles, was notwendig ist, um eine Nachricht an die Anwendung zu senden. Die Endpoint-URL muss daher geheim gehalten werden, oder andere Anwendungen könnten Push-Nachrichten an die Anwendung senden.
+Jedes Abonnement für einen Service-Worker ist eindeutig. Der Endpoint für das Abonnement ist eine eindeutige URL. Die Kenntnis des Endpoints ist alles, was notwendig ist, um eine Nachricht an die Anwendung zu senden. Die Endpoint"=URL muss daher geheim gehalten werden, oder andere Anwendungen könnten Push"=Nachrichten an die Anwendung senden.
 
 \subsection{Ablauf}
 
@@ -112,11 +120,11 @@ Für die Bereitstellung der Geschäftslogik wird ein eigener Applicationserver b
 
 \subsection{Datenbank}
 
-Der Applicationserver stellt ebenfalls die Datenbank zur Verfügung und Verwaltet deren Zugriffe. Als Datenbank soll eine noSQL-Datenbank-Technologie verwendet werden. Diese ermöglicht eine objektorientierte Speicherung der Daten bei maximaler Flexibilität des Schemas. Node.js unterstützt die Anbindung sowohl von MongoDB als auch CouchDB. Wie in Abschnitt \ref{sec_implementierung_mongodb} beschrieben wird für das Projekt die MongoDB-Implementierung verwendet.
+Der Applicationserver stellt ebenfalls die Datenbank zur Verfügung und Verwaltet deren Zugriffe. Als Datenbank soll eine noSQL-Datenbank-Technologie verwendet werden. Diese ermöglicht eine objektorientierte Speicherung der Daten bei maximaler Flexibilität des Schemas. Node.js unterstützt die Anbindung sowohl von MongoDB als auch CouchDB. In der Implementierung wird MongoDB verwendet werden.
 
 \subsection{REST-API}
 
-Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. \ref{subsec_anforderungen_server}) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_konzeption_rest} dargestellt. 
+Zur Bereitstellung von CRUD-Funktionalitäten über standardisierte HTTP-Methoden (vgl. Abschnitt \ref{sec_anforderungen_funktionale-anforderungen}, funktionale Anforderung [FA-4]) wird dem Applicationserver eine RESTful-Schnittstelle hinzugefügt. Eine Übersicht über mögliche API-Routen mit entsprechender HTTP-Methode ist in Tabelle \ref{tbl_konzeption_rest} dargestellt. 
 
 \begin{table}[h]
 \centering
@@ -149,14 +157,7 @@ Wird eine REST-Route ohne Authorization aufgerufen, antwortet der Server mit ein
 \section{Datenmodel}
 \label{sec_konzeption_datamodel}
 
-
-Zur Speicherung der Benutzerinformationen ist die User-Entity notwendig. Neben den Anmeldeinformationen (Benutzername und Passwort) wird für jeden Benutzer eine E-Mail"=Adresse hinterlegt. 
-
-Jeder Benutzer kann mehrere Aufgaben anlegen. Zu diesen Aufgaben können ein Titel, Beschreibung sowie ein Datum hinterlegt werden. Weiterhin können weitere Benutzer zu einer Aufgabe hinzugefügt werden. Dabei ist ein Benutzer immer "Eigentümer" während die anderen Benutzer als "Teilnehmer" agieren.
-
-Zur Abbildung von Freundschaftsbeziehungen ist eine n:m-Beziehung zwischen User und User notwendig. Zu dieser Beziehung werden noch weitere Attribute wie "Anfrage gestellt am", "Bestätigt" und "Abgelehnt" hinzugefügt.
-
-Damit Benutzer unabhängig vom verwendeten Endgerät über Push"=Nachrichten benachrichtigt werden können, muss für einen Benutzer mindesten ein Gerät mit zugehöriger Push"=Subscription"=ID und Endpoint angelegt werden. Somit ist es möglich, dass ein Benutzer auf verschiedenen Endgeräten die selben Push"=Benachrichtigungen angezeigt zu bekommen.
+Die Umsetzung der Beispielanwendung benötigt kein komplexes Datenbankmodell. Abbildung \ref{image_konzeption_datenmodell} zeigt den Entwurf des Datenmodells. Dabei wurden nur notwendige Attribute dargestellt, um die Übersichtlichkeit in der Dokumentation gewährleisten zu können. \\
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/model.png}}
@@ -164,12 +165,23 @@ Damit Benutzer unabhängig vom verwendeten Endgerät über Push"=Nachrichten ben
 \label{image_konzeption_datenmodell}
 \end{figure} 
 
-\newpage
+Zur Erfüllung der, in Abschnitt \ref{sec_anforderungen_nicht-funktionale-anforderungen} beschriebenen, nicht-funktionalen Anforderungen ist eine zentrale Benutzer-Entity notwendig. Diese enthält neben den notwendigen Anmeldeinformationen (Benutzername und Passwort) für jeden registrierten Benutzer eine E"=Mail Adresse. Diese wird beispielsweise benötigt, um die Registrierung zu bestätigen oder um ein vergessenes Passwort zurückzusetzten. 
+
+Jeder Benutzer kann mehrere Aufgaben anlegen. Zu diesen Aufgaben können ein Titel, Beschreibung sowie ein Datum hinterlegt werden. Weiterhin können weitere Benutzer zu einer Aufgabe hinzugefügt werden. Dabei ist ein Benutzer immer \glqq{}Eigentümer\grqq{} während die anderen Benutzer als \glqq{}Teilnehmer\grqq{} agieren.
+
+Zur Abbildung von Freundschaftsbeziehungen ist eine n:m-Beziehung zwischen User und User notwendig. Zu dieser Beziehung werden noch weitere Attribute wie \glqq{}Anfrage gestellt am\grqq{}, \glqq{}bestätigt am\grqq{} und \glqq{}abgelehnt am\grqq{} hinzugefügt.
+
+Damit Benutzer unabhängig vom verwendeten Endgerät über Push"=Nachrichten benachrichtigt werden können, muss für einen Benutzer mindesten ein Gerät mit zugehöriger Push"=Subscription"=ID und Endpoint angelegt werden. Somit ist es möglich, einem Benutzer auf verschiedenen Endgeräten die gleichen Push"=Benachrichtigungen anzuzeigen.
+
 \section{Client-Oberfläche}
 \label{sec_konzeption_client-ui}
 
+\begin{figure}[htp] \centering{
+\includegraphics[width=0.9\textwidth]{images/mockup.png}}
+\caption{Wireframe/Mockup"=Entwurf grafische Benutzeroberfläche}
+\label{image_konzeption_datenmodell}
+\end{figure} 
 
-\todo{Mockup}
 \todo{Beschreibung des UI ...}
 
 Um das \glqq{}Look and Feel\grqq{} einer nativen App zu erreichen wird das UI-Framework \textbf{nativeDroid2} verwendet. \\

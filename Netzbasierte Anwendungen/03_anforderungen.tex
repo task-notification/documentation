@@ -1,5 +1,8 @@
 \chapter{Anforderungen}
+\label{chp_anforderungen}
+
 \section{allgemeine Beschreibung der Applikation}
+\label{sec_anfroderungen_allgemeine-beschreibung}
 
 Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlegen, bearbeiten, anzeigen und löschen. Weiterhin gibt es eine Kontaktliste, in welcher alle Kontakte angezeigt werden, die ebenfalls für die Anwendung registriert sind und zu persönlichen Kontakten hinzugefügt wurden. Aufgaben können mit persönlichen Kontakten geteilt werden. Ebenso ist es möglich Gruppen anzulegen, dieser Kontakte hinzuzufügen und Aufgabe mit der Gruppe zu teilen. \\
 
@@ -40,16 +43,13 @@ Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen die
 
 \paragraph{[NFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
 
-\paragraph{[NFA-2] Kontaktliste.}\label{fa-2} Benutzer können sich untereinander mittels Benutzername bzw. E"~Mail Adresse zur persönlichen Kontaktliste hinzufügen.
+\paragraph{[NFA-2] Kontaktliste.}\label{fa-2} Benutzer können sich untereinander mittels Benutzername bzw. E"~Mail Adresse zur persönlichen Kontaktliste hinzufügen. Benutzer werden über Freundschaftsanfragen benachrichtigt und können diese bestätigen oder ablehnen.
 
-\paragraph{[NFA-3] Gruppen verwalten. }\label{fa-3} Benutzer können Gruppen anlegen und andere Benutzer hinzufügen. Ein Gruppenadministrator kann die Gruppe bearbeiten oder löschen. Benutzer können aus einer Gruppe austreten.
+\paragraph{[NFA-3] Aufgaben anlegen, bearbeiten und löschen.}\label{fa-3} Ein authentifizierte Benutzer können Aufgaben anlegen und anschließend Bearbeiten oder Löschen. Eine Aufgabe muss einen Titel besitzen. Optional kann eine Beschreibung und ein Fälligkeitsdatum hinterlegt werden.
 
-\paragraph{[NFA-4] Aufgaben anlegen, bearbeiten und löschen.}\label{fa-4} Ein Benutzer soll Aufgaben anlegen und anschließend Bearbeiten oder Löschen können.
-Eine Aufgabe muss einen Titel besitzen. Optional können eine Beschreibung, ein Ort, Zeitraum sowie Fälligkeitsdatum hinterlegt werden.
+\paragraph{[NFA-4] Aufgaben teilen.} \label{fa-4} Aufgaben können mit mehreren Benutzer geteilt werden. Benutzer werden über die Einladung zu einer Aufgabe informiert. Nachdem die Einladung bestätigt wurde, wird ein Benutzer über Änderungen an der Aufgabe benachrichtigt. \\
 
-\paragraph{[NFA-5] Aufgaben teilen.} \label{fa-5} Aufgaben können mit mehreren Benutzer geteilt werden. Ebenfalls können Aufgaben einer Gruppe zugeordnet werden. 
-
-\paragraph{[NFA-8] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet. \\
+\paragraph{[NFA-8] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet.
 
 \paragraph{[NFA-9] Ereignisse für Benachrichtigungen.}\label{nfa-9} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
 Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
