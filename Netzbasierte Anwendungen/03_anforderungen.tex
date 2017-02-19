@@ -8,20 +8,23 @@ Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlege
 
 Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH"=Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH"=Notification angezeigt sobald die Aufgabe terminiert.
 
+\todo{Die Beispielanwendung als Einsatzszenario beschreiben\ldots}
+
 \newpage
 \section{funktionale Anforderungen}
 \label{sec_anforderungen_funktionale-anforderungen}
 
 Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenigen verstanden, welche zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
 
-\todo{weiter ausführen\ldots}
+\todo{weiter ausführen, was damit gemeint ist\ldots}
 
-\paragraph{[FA-1] Single Page Application}\label{fa-1}
-\paragraph{[FA-2] Offlinefähigkeit}\label{fa-2} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die hybride Webanwendung Mechanismen zum Vorhalten der persistenten Daten und des nutzerspezifischen Datenmodells im Offlinezustand. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
+\paragraph{[FA-1] Single Page (Mobil) Application.} Die Webanwendung wird als hybride Single Page Application entwickelt. Der Sitzungszustand (\glqq Application State\grqq) wird auf dem Client gespeichert und im Hintergrund mit dem Applicationserver synchronisiert. Die Präsentationslogik wird in der \glqq Boot"=Phase\grqq{} einmal vom Client geladen und Inhalte zur Laufzeit dynamisch angepasst. Während der Navigation wird der Präsentationsfluss im Client nicht angehalten bzw. durch \glqq Neuladen\grqq{} unterbrochen.
 
-\paragraph{[FA-3] Push-Benachrichtigungen}\label{fa-3} Benutzer der Webanwendung werden unabhängig vom verwendeten Endgerät über bestimmte Ereignisse mit Hilfe von Push"=Benachrichtigungen informiert. Diese Ereignisse werden vom Applicationserver verarbeitet und dieser initiiert Push"=Benachrichtigungen beim Client. 
+\paragraph{[FA-2] Offlinefähigkeit.} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die hybride Webanwendung Mechanismen zum Vorhalten der statischen Ressourcen und des Sitzungszustands der Anwendung (\glqq Application State\grqq) im Offlinmodus. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
 
-\paragraph{[FA-4] Schnittstelle für Kommunikation mit Applicationserver}\label{fa-4} Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful"=Schnittstelle zu erfüllen:
+\paragraph{[FA-3] Push-Benachrichtigungen.} Benutzer der Webanwendung werden unabhängig vom verwendeten Endgerät über bestimmte Ereignisse mit Hilfe von Push"=Benachrichtigungen informiert. Diese Ereignisse werden vom Applicationserver ausgelöst/verarbeitet und dieser initiiert Push"=Benachrichtigungen beim Client. 
+
+\paragraph{[FA-4] Schnittstelle für Kommunikation mit Applicationserver.} Der API Server unterstützt folgende Anforderungen um die Funktionalitäten einer RESTful"=Schnittstelle zu erfüllen:
 
 \begin{itemize}
 \setlength{\itemsep}{0pt}%
@@ -33,26 +36,27 @@ Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenige
 \item alle Requests werden auf der Konsole ausgegeben
 \end{itemize}  
 
-\newpage
+\paragraph{[FA-5] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Bei Ressourcenanforderung muss ein Token im \code{Authorization"=Header} oder \code{Request"=Body} übergeben werden. Im Fehlerfall sollen aussagekräftige und passende HTTP"=Fehler zurückgegeben werden.
+
 \section{nicht-funktionale Anforderungen}
 \label{sec_anforderungen_nicht-funktionale-anforderungen}
 
 Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen diejenigen verstanden, welche nicht zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
 
-\todo{weiter ausführen...}
+\todo{weiter ausführen, was damit gemeint ist\ldots}
 
-\paragraph{[NFA-1] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
+\paragraph{[NFA-1] Look \& Feel einer nativen Android"=App.} Die Website soll sich optisch an den \glqq Material Design\grqq "=Richtlinien für Android"=Applikationen orientieren. Auf mobilen Endgeräten soll die Touch"=Unterstützung genauso gewährleistet sein, wie die smartphonetypischen Wisch"=Geseten. Das Framework \glqq JQuery"=Mobile\grqq{} mit zugehörigem UI"=Framework \glqq JQuery"=Mobile"=UI\grqq{} kann als JQuery"=Erweiterung zu diesem Zweck eingesetzt werden.
 
-\paragraph{[NFA-2] Kontaktliste.}\label{fa-2} Benutzer können sich untereinander mittels Benutzername bzw. E"~Mail Adresse zur persönlichen Kontaktliste hinzufügen. Benutzer werden über Freundschaftsanfragen benachrichtigt und können diese bestätigen oder ablehnen.
+\paragraph{[NFA-2] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
 
-\paragraph{[NFA-3] Aufgaben anlegen, bearbeiten und löschen.}\label{fa-3} Ein authentifizierte Benutzer können Aufgaben anlegen und anschließend Bearbeiten oder Löschen. Eine Aufgabe muss einen Titel besitzen. Optional kann eine Beschreibung und ein Fälligkeitsdatum hinterlegt werden.
+\paragraph{[NFA-3] Kontaktliste.} Benutzer können sich untereinander mittels Benutzername bzw. E"~Mail Adresse zur persönlichen Kontaktliste hinzufügen. Benutzer werden über Freundschaftsanfragen benachrichtigt und können diese bestätigen oder ablehnen.
 
-\paragraph{[NFA-4] Aufgaben teilen.} \label{fa-4} Aufgaben können mit mehreren Benutzer geteilt werden. Benutzer werden über die Einladung zu einer Aufgabe informiert. Nachdem die Einladung bestätigt wurde, wird ein Benutzer über Änderungen an der Aufgabe benachrichtigt. \\
+\paragraph{[NFA-4] Aufgaben anlegen, bearbeiten und löschen.} Ein authentifizierte Benutzer können Aufgaben anlegen und anschließend Bearbeiten oder Löschen. Eine Aufgabe muss einen Titel besitzen. Optional kann eine Beschreibung und ein Fälligkeitsdatum hinterlegt werden.
 
-\paragraph{[NFA-8] Gesicherter Zugriff auf API.} Der Zugriff auf die API ist nur für authentifizierte Benutzer möglich. Für die Authentifizierung wird das Konzept Token verwendet.
+\paragraph{[NFA-5] Aufgaben teilen.} Aufgaben können mit mehreren Benutzer geteilt werden. Benutzer werden über die Einladung zu einer Aufgabe informiert. Nachdem die Einladung bestätigt wurde, wird ein Benutzer über Änderungen an der Aufgabe benachrichtigt.
 
-\paragraph{[NFA-9] Ereignisse für Benachrichtigungen.}\label{nfa-9} Benutzer, die in einer Aufgabe involviert sind, erhalten Benachrichtigungen über Änderungen an Aufgaben. Wenn für eine Aufgabe eine Fälligkeit mit Benachrichtigung hinterlegt wurde, wird der Benutzer zum entsprechenden Zeitpunkt informiert.\\
-Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben hinzugefügt bzw. bearbeitet werden alle Gruppenmitglieder entsprechend Benachrichtigt.
+\paragraph{[NFA-6] Ereignisse für Benachrichtigungen.} Benutzer werden über Freundschaftsanfragen und Änderungen an Aufgaben informiert, in denen sie involviert sind. Benachrichtigungen werden nur angezeigt, wenn die Webanwendung nicht aktiv ist. Die Website gilt als \glqq aktiv\grqq, wenn sie auf dem Bildschirm angezeigt wird. \\
+Folgende Ereignisse lösen eine Benachrichtigung aus:
 
 \begin{itemize}
 \setlength{\itemsep}{0pt}%
@@ -64,4 +68,3 @@ Wird ein Benutzer in eine Gruppe eingeladen bzw. wird einer Gruppe eine Aufgaben
 \item Bestätigung/Ablehnung durch einen Benutzer auf eine Einladung zu einer Aufgabe
 \item Änderungen an einer Aufgabe, an welcher der Benutzer beteiligt ist
 \end{itemize}
-
