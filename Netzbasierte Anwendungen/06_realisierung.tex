@@ -1,6 +1,28 @@
 \chapter{Implementierung}
 
+Das folgende Kapitel beschreibt die Umsetzung der im vorherigen Kapitel beschriebenen Konzeption. Dabei wird sich sowohl bei der serverseitigen als auch clientseitigen Implementierung auf die \todo{anderes Wort?}[Bereiche] konzentriert, die für die Verwendung der Service Worker Technologie und die Erfüllung der Projektaufgabe notwendig sind. Die Umsetzung der grafischen Benutzeroberfläche ist damit nicht Bestandteil dieser Dokumentation.
+
 \section{Applicationserver}
+
+Neben einer Datenbank bietet der Applicationserver die Funktionalitäten eines Webservers. Als Backend"=Plattform wird Node.js eingesetzt und mit Hilfe von \code{Node Express} ist in wenigen Schritten ein voll-funktionsfähiger Webserver installiert und eingerichtet.  
+
+\begin{lstlisting}[caption=package.json - notwendige Node.js Pakete, frame=single]
+{
+  "name": "node-rest-auth",
+  "main": "server.js",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "~1.9.2",
+    "express": "~4.9.8",
+    "jwt-simple": "^0.3.1",
+    "mongoose": "~4.2.4",
+    "morgan": "~1.5.0",
+    "passport": "^0.3.0",
+    "passport-jwt": "^1.2.1"
+  }
+}
+\end{lstlisting}
+
 
 \subsection{Datenbank}
 \label{subsec_implementierung_datenbank}
@@ -12,6 +34,9 @@
 \subsection{Caching der statischen Ressourcen}
 
 \subsection{Persistenz und Synchronisation des Application State}
+
+
+\todo{Hier noch etwas über die Background.Sync API sagen\ldots}
 
 \todo{Eventuell passt hier die ALternative PouchDB hin\ldots}
 

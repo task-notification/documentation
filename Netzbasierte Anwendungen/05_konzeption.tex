@@ -56,6 +56,8 @@ Das \code{cacheFirst}-Verfahren bietet sich für den vorliegenden Anwendungsfall
 
 Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die hybride Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
 
+\todo{Hier noch etwas über die Background.Sync API sagen\ldots}
+
 \todo{Mehr Inhalt\ldots}
 
 \newpage
@@ -65,48 +67,55 @@ Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschri
 Die Push"=API bietet Webanwendungen die Möglichkeit, von einem Server gesendete Nachrichten zu empfangen, unabhängig davon, ob die Webanwendung im Vordergrund oder sogar aktuell geladen ist. \\
 Damit eine App, Push-Nachrichten empfangen kann, muss sie einen aktiven Service-Worker haben. Wenn der Service-Worker aktiv ist, kann er Push"=Benachrichtigungen über seinen internen Push"=Manager (\code{PushManager.subscribe()}) abonnieren.
 
-Die resultierende \code{PushSubscription} enthält alle Informationen, die die Anwendung benötigt, um eine Push"=Nachricht zu senden: einen Endpoint und den für das Senden von Daten erforderlichen Verschlüsselungsschlüssel.
+Die resultierende \code{PushSubscription} enthält alle Informationen, die die Anwendung benötigt, um eine Push"=Nachricht zu senden. Neben einem Endpoint ebenfalls den für das Senden von Daten erforderlichen Verschlüsselungsschlüssel.
 
-Der Service-Worker wird nach Bedarf gestartet, um eingehende Push"=Nachrichten zu behandeln, die an den \code{ServiceWorkerGlobalScope.onpush()}- Eventhandler übergeben werden. Dies ermöglicht es Webanwendungen, auf empfangene Push"=Nachrichten, beispielsweise durch Anzeigen einer Benachrichtigung zu reagieren. \\
-Für die Anzeige für Benachrichtigungen aus dem Service Worker heraus, wird laut Standard die Methode \code{ServiceWorkerRegistration.showNotification()} bereitgestellt.
+Der Service Worker wird nach Bedarf gestartet, um eingehende Push"=Nachrichten zu behandeln, die an den \code{ServiceWorkerGlobalScope.onpush()}- Eventhandler übergeben werden. Dies ermöglicht es Webanwendungen, auf empfangene Push"=Nachrichten, beispielsweise durch Anzeigen einer Benachrichtigung zu reagieren. \\
+Für die Anzeige von Benachrichtigungen aus dem Service Worker heraus, wird laut Standard die Methode \code{ServiceWorkerRegistration.showNotification()} bereitgestellt.
 
-Jedes Abonnement für einen Service-Worker ist eindeutig. Der Endpoint für das Abonnement ist eine eindeutige URL. Die Kenntnis des Endpoints ist alles, was notwendig ist, um eine Nachricht an die Anwendung zu senden. Die Endpoint"=URL muss daher geheim gehalten werden, oder andere Anwendungen könnten Push"=Nachrichten an die Anwendung senden.
+Jedes Abonnement für einen Service Worker ist eindeutig. Der Endpoint für das Abonnement ist eine eindeutige URL. Die Kenntnis des Endpoints ist alles, was notwendig ist, um eine Nachricht an die Anwendung zu senden. Die Endpoint"=URL muss daher geheim gehalten werden, oder andere Anwendungen könnten Push"=Nachrichten an die Anwendung senden.
 
 \subsection{Ablauf}
+
+Abbildung \ref{image_konzeption_architektur-serviceworker-push} zeigt den grundsätzlichen Ablauf von Registrierung des Push"=Managers, über die Übertragung der Endpointinformationen bis hin zum Versand von Push"=Nachrichten. 
+
+Zuerst  muss der Nutzer der Webanwendung auf eine Anforderung für Webbenachrichtigungen oder sonstige verwendete Berechtigungen reagieren, indem er die Berechtigungen erteilt (vgl. Abbildung \ref{image_konzeption_notification-permission}). \\
+
+\begin{figure}[htp] \centering{
+\includegraphics[width=0.5\textwidth]{images/notification_permission.jpg}}
+\caption{Chrome - Berechtigungen zum Anzeigen von Benachrichtigungen}
+\label{image_konzeption_notification-permission}
+\end{figure} 
+
+Nachdem die Berechtigung erfolgt ist, wird der Service Worker, lokal  für die Webanwendung registriert. 
+Danach wird der Push"=Messaging"=Service, in unserem Fall \glqq Firebase Cloud Messaging\grqq{} (kurz FCM) mit der Funktion \code{PushManager.subscribe()} abonniert (vgl. Abbildung \ref{image_konzeption_architektur-serviceworker-push} Punkt 1). 
+
+Mit Hilfe von \code{PushSubscription.endpoint} kann der mit der Subscription verknüpfte Endpoint abgerufen werden. Die Details werden an den Applicationserver gesendet, so dass er Push"=Nachrichten senden kann, wenn dies erforderlich ist (vgl. Abbildung \ref{image_konzeption_architektur-serviceworker-push} Punkt 2). Die Subscription-ID wird aus dem kompletten Endpoint entnommen. 
+
+Auf Serverseite wird der Endpoint und alle erforderlichen Details, wie die Sender ID und Geräte ID in der Datenbank gespeichert, so dass sie verfügbar sind, wenn eine Push"=Nachricht an einen Benutzer bzw. ein Endgerät gesendet werden soll. \\
 
 \begin{figure}[htp] \centering{
 \centering
 \includegraphics[width=0.9\textwidth]{images/architektur_serviceworker_push.pdf}}
 \caption{Push mittels Serviceworker (in Anlehnung an MozillaWiki \cite{MOZ_WIKI})}
 \quelle\url{https://wiki.mozilla.org/File:PushNotificationsHighLevel.png}
-\label{image_architektur-serviceworker-push}
+\label{image_konzeption_architektur-serviceworker-push}
 \end{figure} 
 
-Abbildung \ref{image_architektur-serviceworker-push} zeigt den grundsätzlichen Ablauf von Registrierung des Push"=Managers, über die Übertragung der Endpointinformationen bis hin zum Versand von Push"=Nachrichten.
-
-Zuerst  muss der Nutzer der Web-App auf eine Anforderung für Webbenachrichtigungen oder sonstige verwendete Berechtigungen reagieren, indem er der App die Berechtigungen erteilt\todo{Bild hinzufügen}. \\
-Nachdem die Berechtigung erfolgt ist, wird der Service Worker, lokal  für die Webanwendung registriert. 
-Danach wird der Push"=Messaging"=Service, in unserem Fall „Firebase Cloud Messaging“ (kurz FCM) mit der Funktion \code{PushManager.subscribe()} abonniert. 
-
-Mit Hilfe von \code{PushSubscription.endpoint} kann der mit der Subscription verknüpfte Endpoint abgerufen werden. Die Details werden an den Applicationserver gesendet, so dass er Push"=Nachrichten senden kann, wenn dies erforderlich ist. Die Subscription-ID wird aus dem kompletten Endpoint entnommen. 
-
-Auf Serverseite wird der Endpoint und alle erforderlichen Details, wie die Sender ID und Geräte ID in der Datenbank gespeichert, so dass sie verfügbar sind, wenn eine Push"=Nachricht an einen Benutzer bzw. ein Endgerät gesendet werden soll. 
-
-Um eine Push"=Nachricht zu senden, muss ein HTTP-POST an die Endpoint"=URL gesendet werden. Die Anforderung muss einen TTL-Header enthalten, der begrenzt, wie lange die Nachricht in der Warteschlange stehen soll, wenn der Benutzer nicht online ist.  
-
-Um Nutzdaten in die Anfrage einzubinden, müssen diese verschlüsselt werden (mit dem öffentlichen Schlüssel des Clients (public key)).
-Da wir uns gegen eine Nutzdatensendung über den Browseranbieter entschieden haben, entfällt bei uns dieser Schritt. 
+Um eine Push"=Nachricht zu senden, muss ein HTTP-POST an die Endpoint"=URL (vgl. Abbildung \ref{image_konzeption_architektur-serviceworker-push} Punkt 3) gesendet werden. Die Anforderung muss einen TTL-Header enthalten, der begrenzt wie lange die Nachricht in der Warteschlange stehen soll, wenn der Benutzer nicht online ist.
 
 Sobald die Push"=Nachricht vom Web Push Server erfolgreich versendet wurde, antwortet dieser mit einem Response, welcher eine eindeutige Message ID enthält. Diese referenziert auf eine bestimmte Push"=Benachrichtigung.
 
 Den vom Applicationserver zuvor generierten Nutzdaten (Payload) wird diese Message ID zugeordnet und auf für Clientanfragen vorgehalten. \\
-Sobald eine Push"=Nachricht vom Client empfangen wird, löst dies ein onPush"=Event aus. Der Event-Listener reagiert mit einer direkten Anfrage beim Applicationserver und fragt ggf. vorhandenen Payload für die aktuelle Message ID ab.
+Sobald eine Push"=Nachricht vom Client empfangen wird, löst dies ein \code{onPush}"=Event aus (vgl. Abbildung \ref{image_konzeption_architektur-serviceworker-push} Punkt 4). Der Event-Listener reagiert mit einer direkten Anfrage beim Applicationserver und fragt ggf. vorhandenen Payload für die aktuelle Message ID ab.
+
+\todo{Es ist auch so möglich: Besser ausformulieren}Um Nutzdaten in die Anfrage einzubinden, müssen diese verschlüsselt werden (mit dem öffentlichen Schlüssel des Clients (public key)).
+Da wir uns gegen eine Nutzdatensendung über den Browserhersteller entschieden haben, entfällt bei uns dieser Schritt. 
 
 \newpage
 \section{Architekturbeschreibung}
 \label{sec_konzeption_serviceworker_architektur}
 
-Die Anwendung beruht auf dem Client-Server-Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI- und Serviceworker-Logik ist die gesamte Geschäftslogik auf einen Business-Server (Applicationserver) ausgelagert. Die zentrale Datenbank sowie die statischen Ressourcen zur Darstellung des Client werden ebenfalls vom Applicationserver bereitgestellt. Für die Kommunikation steht eine RESTful-Schnittstelle zur Verfügung.
+Die Anwendung beruht auf dem Client"=Server"=Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI"= und Serviceworker"=Logik ist die gesamte Geschäftslogik auf einen Business-Server (Applicationserver) ausgelagert. Die zentrale Datenbank sowie die statischen Ressourcen zur Darstellung des Client werden ebenfalls vom Applicationserver bereitgestellt. Für die Kommunikation steht eine RESTful"=Schnittstelle zur Verfügung.
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/architektur_serviceworker.pdf}}
@@ -178,13 +187,15 @@ Damit Benutzer unabhängig vom verwendeten Endgerät über Push"=Nachrichten ben
 \section{Client-Oberfläche}
 \label{sec_konzeption_client-ui}
 
-Um das \glqq{}Look and Feel\grqq{} einer nativen Android"=Applikation zu erreichen wird nach Anforderung [NFA-1] (vgl. Abschnitt \ref{sec_anforderungen_nicht-funktionale-anforderungen}) das UI"=Framework \glqq JQuery"=Mobile"=UI\grqq{} verwendet.    das UI-Framework \textbf{nativeDroid2} verwendet. \\
-
+Um das \glqq{}Look \& Feel\grqq{} einer nativen Android"=Applikation zu erreichen wird nach Anforderung [NFA-1] (vgl. Abschnitt \ref{sec_anforderungen_nicht-funktionale-anforderungen}) das Framework \glqq JQuery"=Mobile\grqq{} verwendet.\\
+Von Haus aus wird kein \glqq Material Design\grqq{} mitgeliefert. Das UI-Framework \textbf{nativeDroid2} setzt auf \glqq JQuery"=Mobile\grqq{} auf und bietet ein \glqq Material Design\grqq{}-Theme, sowie Hilfsklassen und Funktionen, die es erleichtern ein natives \glqq{}Look \& Feel\grqq{} in Webanwendungen zu gewährleisten. \\
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/mockup.png}}
 \caption{Wireframe/Mockup"=Entwurf grafische Benutzeroberfläche}
-\label{image_konzeption_datenmodell}
+\label{image_konzeption_gui}
 \end{figure} 
 
-\todo{Beschreibung des UI ...}
+Neben Ansichten für die Benutzerregistrierung und Anmeldung benötigt die Webseite Views für die Anzeige von Listen, eine Detailansicht für Listenelemente sowie ein Formular zum anlegen von neuen Aufgaben. 
+
+Für die Navigation innerhalb der Webseite kommt eine vertikale Navigation zum Einsatz, die wie in nativen Applikationen ggf. ein"= bzw. ausgeblendet werden kann. Auf der Startseite ermöglicht eine horizontale Tab"=Navigation die Anzeige von verschiedenen Liste. Neben aktuellen Nachrichten wird eine Liste aller Aufgaben, sowie eine Kontaktliste integriert (vgl. Abbildung \ref{image_konzeption_gui}). 

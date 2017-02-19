@@ -4,6 +4,10 @@
 
 \documentclass[fontsize=11pt, paper=a4, headinclude, twoside=false, parskip=half+, pagesize=auto, numbers=noenddot, open=right]{scrreprt} %{article}
 
+\usepackage{times}
+\fontfamily{ptm}\selectfont
+\renewcommand*\rmdefault{ptm}
+
 \usepackage[left= 2cm,right = 2cm, bottom = 2 cm]{geometry}
 \usepackage[onehalfspacing]{setspace}
 \usepackage[german]{babel}
@@ -55,6 +59,9 @@
   language=Java,
   aboveskip=3mm,
   belowskip=3mm,
+  captionpos=b,
+  breakatwhitespace=true,
+  basicstyle=\footnotesize,
   showstringspaces=false,
   columns=flexible,
   basicstyle={\small\ttfamily},
@@ -66,7 +73,7 @@
   breakatwhitespace=true,
   tabsize=3,
   numbers=left,
-  stepnumber=5,    
+  stepnumber=1,    
   firstnumber=1,
   numberfirstline=true
 }
