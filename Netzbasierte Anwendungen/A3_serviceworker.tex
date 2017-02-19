@@ -1,0 +1,74 @@
+\section{Service Worker Konfiguration}
+\subsection{Ressourcen für Caching festlegen}
+\label{subsec_a3_caching}
+
+\begin{lstlisting}[caption={Service Worker Konfiguration - Ressourcen für Caching},label={lst_a3_sw-caching}, frame=single]
+var urlsToCache = [
+    './vendor/nativedroid2/css/nativedroid2.color.blue-grey.css',
+    './vendor/nativedroid2/css/nativedroid2.color.teal.css',
+    './vendor/nativedroid2/css/flexboxgrid.min.css',
+    './vendor/nativedroid2/css/material-design-iconic-font.min.css',
+    './vendor/nativedroid2/fonts/Material-Design-Iconic-Font.eot',
+    './vendor/nativedroid2/fonts/Material-Design-Iconic-Font.svg',
+    './vendor/nativedroid2/fonts/Material-Design-Iconic-Font.ttf',
+    './vendor/nativedroid2/fonts/Material-Design-Iconic-Font.woff',
+    './vendor/nativedroid2/js/nativedroid2.js',
+    './vendor/fingerprint2js/fingerprint2.js',
+
+    './vendor/font-awesome/css/font-awesome.min.css',
+    './vendor/font-awesome/fonts/FontAwesome.otf',
+    './vendor/font-awesome/fonts/fontawesome-webfont.eot',
+    './vendor/font-awesome/fonts/fontawesome-webfont.svg',
+    './vendor/font-awesome/fonts/fontawesome-webfont.ttf?v=4.6.3',
+    './vendor/font-awesome/fonts/fontawesome-webfont.woff?v=4.6.3',
+    './vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3',
+
+    './vendor/jquery/jquery-3.1.1.min.js',
+    './vendor/jquery/jquery-migrate-3.0.0.js',
+    './vendor/jquery-mobile/jquery.mobile-1.4.5.min.js',
+    './vendor/jquery-mobile/jquery.mobile-1.4.5.min.css',
+    './vendor/jquery-mobile/images/ajax-loader.gif',
+    './vendor/jquery-ui/jquery-ui.min.js',
+    './vendor/jquery-ui/jquery-ui.min.css',
+    './vendor/jquery-validate/jquery.validate.min.js',
+
+    './vendor/waves/waves.min.js',
+    './vendor/waves/waves.min.js.map',
+    './vendor/waves/waves.min.css',
+    './vendor/wow/animate.css',
+    './vendor/wow/wow.min.js',
+
+    './vendor/idb/',
+    './vendor/idb/lib/',
+    './vendor/idb/lib/idb.js',
+
+    './config/nd2settings.js',
+    './fragments/bottom.sheet.html',
+    './fragments/panel.left.html',
+    './fragments/page.home.html',
+    './fragments/page.login.html',
+    './fragments/page.register.html',
+    './fragments/page.task.add.html',
+
+    './resources/css/style.css',
+    './resources/fonts/Roboto-Regular.ttf',
+    './resources/img/2.jpg',
+    './resources/img/8.jpg',
+    './resources/img/9.jpg',
+    './resources/img/10.jpg',
+    './resources/img/examples/card_bg_1.jpg',
+    './resources/img/examples/card_bg_2.jpg',
+    './resources/img/examples/card_bg_3.jpg',
+    './resources/img/examples/card_thumb_1.jpg',
+    './resources/img/examples/card_thumb_2.jpg',
+    './resources/img/examples/card_thumb_3.jpg',
+
+    './resources/js/app.js',
+    './resources/js/pushFunctions.js',
+    './resources/js/validation.js',
+    './resources/js/home.js',
+    './manifest.json',
+    './index.php',
+    './'
+];
+\end{lstlisting}

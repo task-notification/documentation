@@ -4,64 +4,100 @@ Das folgende Kapitel beschreibt die Umsetzung der im vorherigen Kapitel beschrie
 
 \section{Applicationserver}
 
-Neben einer Datenbank bietet der Applicationserver die Funktionalitäten eines Webservers. Als Backend"=Plattform wird Node.js eingesetzt und mit Hilfe von \code{Node Express} ist in wenigen Schritten ein voll-funktionsfähiger Webserver installiert und eingerichtet.  
+\subsection{Node.js Express"=Server}
+\label{subsec_implementierung_applicationserver}
 
-\begin{lstlisting}[caption=package.json - notwendige Node.js Pakete, frame=single]
+Neben einer Datenbank bietet der Applicationserver die Funktionalitäten eines Webservers. Als Backend"=Plattform wird Node.js eingesetzt und mit Hilfe von \code{Node Express} ist in wenigen Schritten ein voll-funktionsfähiger Webserver installiert und eingerichtet. \\
+
+\begin{lstlisting}[caption={package.json - notwendige Node.js Pakete},label={lst_realisierung_package.json}, frame=single]
 {
-  "name": "node-rest-auth",
-  "main": "server.js",
+  "name": "node-api",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
   "dependencies": {
-    "bcrypt": "^0.8.5",
-    "body-parser": "~1.9.2",
-    "express": "~4.9.8",
-    "jwt-simple": "^0.3.1",
-    "mongoose": "~4.2.4",
-    "morgan": "~1.5.0",
-    "passport": "^0.3.0",
-    "passport-jwt": "^1.2.1"
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.15.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.14.0",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^7.1.9",
+    "mongodb": "^2.2.11",
+    "mongoose": "~3.6.13",
+    "morgan": "~1.7.0",
+    "node-gcm": "^0.14.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.0"
   }
 }
 \end{lstlisting}
 
 
-\subsection{Datenbank}
+Die Bereitstellung der notwendigen Funktionalitäten setzt einige \code{node-packages} voraus, die der \code{package.json}"=Datei hinzugefügt werden (vgl. Listing \ref{lst_realisierung_package.json}). 
+
+Wir nutzen \glqq PassportJS\grqq{} als Middleware zur Authentifizierung für Node.js und das \glqq JSON Web Token\grqq "=Prinzip für die Generierung von Authentifizierungstoken. Weiterhin werden Pakete für die Verschlüsselung von Passwörtern sowie für die Anbindung von MongoDB und \code{morgan} für das Request"=Logging installiert.
+
+Die Umsetzung des Datenbankschemas in MongoDB sowie das objektrelationale Mapping (ORM) erfolgt mittels des \code{node-package} \code{mongoose}. Lisiting \ref{lst_a2_model-user} im Anhang \ref{subsub_a2_mongoose-schema} zeigt beispielhaft die Einrichtung der Benutzer"=Entity für die Benutzerauthentifikation. 
+
+Eine genaue Beschreibung der Einrichtung einer Node.js"=Anwendung ist nicht Bestandteil dieser Dokumentation und soll nicht weiter beleuchtet werden. An dieser Stelle sei an zahlreiche Anleitungen im Internet verwiesen.
+
+\subsection{Datenbank"=Server}
 \label{subsec_implementierung_datenbank}
+
+Für die persistente Speicherung der Daten auf Serverseite wird ein MongoDB"=Server aufgesetzt. Die genaue Installation und Einrichtung ist nicht Bestandteil dieser Dokumentation. \\
+Nach erfolgreicher Installation muss der Applicationserver so konfiguriert werden, dass er sich mit der Datenbank verbinden und Anfragen stellen kann (vgl. Listing \ref{lst_realisierung_passport.js}).
+
+\begin{lstlisting}[caption={Verbindung zur Datenbank konfigurieren},label={lst_realisierung_passport.js}, frame=single]
+// app.js 
+mongoose.connect(config.database);
+
+// config/database.js
+module.exports = {
+    'secret': 'thisIsNotASecretKeyChangePlease!',
+    'database': 'mongodb://localhost:27017/tasky'
+};
+\end{lstlisting}
+
 
 \subsection{REST-Schnittstelle}
 
-\section{Serviceworker}
+Die in Abschnitt \ref{subsec_konzeption_rest-api} geplante RESTful"=Schnittstelle wird im Node.js Express"=Server umgesetzt. Jeder Request, der sich direkt auf die Anforderung von benutzerspezifischen Ressourcen bezieht erfordert einen gültigen Authentifizierungstoken (vgl. Anhang \ref{subsub_a2_api-security}). Dadurch ist es möglich innerhalb der Routing"=Methoden direkt auf die User"=Entity zuzugreifen und damit nur die Daten zu übermitteln, die den anfragenden Benutzer zugeordnet sind.
 
-\subsection{Caching der statischen Ressourcen}
+\subsubsection{Test der REST-API}
 
-\subsection{Persistenz und Synchronisation des Application State}
-
-
-\todo{Hier noch etwas über die Background.Sync API sagen\ldots}
-
-\todo{Eventuell passt hier die ALternative PouchDB hin\ldots}
+Um die Funktionalitäten der REST"=Schnittstelle zu überprüfen und zu untersuchen wird Postman\footnote{\textit{\url{https://www.getpostman.com/}}} verwendet. Dieses Tool ermöglicht es in einer grafischen Oberfläche Requests an eine URL zusammenzustellen und die entsprechenden Responses auszuwerten.
 
 
-\subsection{Push-Notification}
+\section{Service Worker}
+\label{sec_realisierung_serviceworker}
+
+\subsection{Voraussetzungen}
+
+\subsubsection{Browser Support}
+
+\subsubsection{HTTPS}
 
 
-\begin{lstlisting}
-// /js/app.js
+\subsection{Service Worker installieren}
+
+Um einen Service Worker zu installieren, muss dieser zuerst für die entsprechende Webseite registriert werden. Listing \ref{lst_realisierung_register-service-worker} zeigt, wie der Service Worker registriert wird.\\
+Zuerst wird überprüft, ob der aktuelle Browser die Service Worker API unterstützt. Um den aktuellen Zustand des Service Workers beim Laden der Seite nachvollziehen zu können, wird dieser in die Debugging"=Konsole des Browsers geschrieben.\\
+Die \code{serviceWorker.register()}"=Methode erwartet als Parameter die Service Worker Konfigurationsdatei. Diese enthält \code{Listener}, die auf verschiedene \code{Events} reagieren und die eigentliche Funktionalitäten bereitstellen. Weiterhin kann dem Service Worker ein \code{scope} übergeben werden. Dieser definiert den Context, für den die Service Worker Registration gültig ist. \\
+Es ist also grundsätzlich möglich, mehrere Service Worker für eine Webanwendung zu registrieren. Jeder \code{scope} benötigt dabei eine eigene Konfigurationsdatei (diese muss sich direkt unter dem \code{scope}-Pfad befinden). Wird kein \code{scope} explizit angegeben, wird dieser aus dem Pfad der Konfigurationsdatei abgeleitet.
+
+\begin{lstlisting}[caption={Einrichtung Service Worker},label={lst_realisierung_register-service-worker}, frame=single]
+// js/app.js
 if ('serviceWorker' in navigator)
 {
-    navigator.serviceWorker.register('sw.js').then(function(reg) {
-
+    navigator.serviceWorker.register('sw.js').then(function(reg) 
+    {
         if(reg.installing)
-        {
             console.log('Service worker installing');
-        } 
         else if(reg.waiting)
-        {
             console.log('Service worker installed');
-        } 
         else if(reg.active)
-        {
             console.log('Service worker active');
-        }
 
     }).catch(function(error)
     {
@@ -69,6 +105,80 @@ if ('serviceWorker' in navigator)
         console.log('Registration failed with ' + error);
     });
 }
-
-\caption{Einrichtung Serice Worker}
 \end{lstlisting}
+
+\subsection{Caching der statischen Ressourcen}
+
+Innerhalb der Service Worker Konfigurationsdatei wird unter anderem festgelegt, welche Ressourcen zwischengespeichert werden sollen, welche Caching"=Strategie vom Service Worker verfolgt wird und wie dieser Requests und eingehenden Responses verarbeiten soll. 
+
+Listing \ref{lst_realisierung_sw-install} zeigt, wie die Ressourcen festzulegen sind, die im Cache vorgehalten werden. Wenn der Service Worker erfolgreich registriert wurde, wird das \code{install}"=Event ausgelöst. Für die Übersicht wurde die Liste der Ressourcen des Cache in das Array \code{urlToCache} ausgelagert. Dieses ist im Anhang \ref{subsec_a3_caching} vollständig aufgeführt.\\
+
+\begin{lstlisting}[caption={Ressourcen festlegen, die im Zwischenspeicher vorgehalten werden sollen},label={lst_realisierung_sw-install}, frame=single]
+// sw.js
+this.addEventListener('install', function(event) {
+    console.log('The service worker is being installed.');
+    event.waitUntil( caches.open(CACHE_NAME)
+        .then(function(cache) {
+            return cache.addAll(urlsToCache);
+        })
+        .then(function(){
+            return self.skipWaiting();
+        })
+    );
+});
+\end{lstlisting}
+  
+Die Integration des JavaScript"=\code{Promise}="Konzepts ermöglicht es dem Service Worker im Hintergrund zu arbeiten und Anfragen asynchron zu bearbeiten. Es wird oft mit einer Verkettung von \code{Promises} gearbeitet, um auf den Abschluss einer Operation zu warten und anschließend weitere Operationen durchzuführen. Dabei kommen ebenfalls \code{callback}-Funktionen zum Einsatz, die das Ergebnis einer vorangegangenen Operation enthalten uns selbst wieder einen \code{Promise} darstellen.  
+
+Nachdem der Service Worker erfolgreich registriert und die statischen Ressourcen für das Caching eingerichtet sind, wird die Caching"=Strategie aus Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} umgesetzt. Wenn ein Request von der Webseite gestellt wird, empfängt der Service Worker \code{fetch}"=Events. Listing \ref{lst_realisierung_sw-caching} zeigt wie die Caching"=Strategie durch Verarbeitung möglicher Responses umgesetzt werden kann. \\
+
+\begin{lstlisting}[caption={Verarbeitung empfangener Requests und Auswertung möglicher Responses im Service Worker},label={lst_realisierung_sw-caching}, frame=single]
+// sw.js
+this.addEventListener('fetch', function(event) {
+    console.log('The service worker is serving the asset.');
+
+    event.respondWith(
+      // try to find cached resource
+      caches.match(event.request).catch(function() {
+        // fetch network request
+        return fetch(event.request).then(function(response) {
+          // save resource to cache
+          return caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(event.request, response.clone());
+            return response;
+          });  
+        });
+      })
+    );
+});
+\end{lstlisting}
+
+
+\subsection{Persistenz und Synchronisation des Application State}
+
+\todo{Hier noch etwas über die Background.Sync API sagen\ldots}
+
+\todo{Eventuell passt hier die ALternative PouchDB hin\ldots}
+
+
+\subsubsection{Bereitstellung von benutzerspezifischem Payload}
+
+
+
+\subsection{Cross Domain Requests}
+
+\todo{weiter ausführen und besser ausformulieren\ldots}
+Da die API"=Requests an eine andere URL gestellt werden, als die statischen Ressourcen bezogen werden, kommt es zu \code{Cross domain origin} Fehlern. Wir nutzen eine Router"=Middleware, um allen Responses unseres Applicationsservers die in \ref{lst_realisierung_router-cross-domain} aufgeführten \code{Access"=Controll}"=Header hinzuzufügen.
+
+\begin{lstlisting}[caption={Router-Middleware um jedem Response die \code{Access-Control}-Header hinzuzufügen},label={lst_realisierung_router-cross-domain}, frame=single]
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next(); // go to the next routes and don't stop here
+});
+\end{lstlisting}
+
+
+\subsection{Push-Benachrichtigungen}
+
+

@@ -1,0 +1,140 @@
+\section{Applicationserver}
+\subsection{mongoos-Schema User-Entity}
+\label{subsub_a2_mongoose-schema}
+
+\begin{lstlisting}[caption={Mongoose Schema der User-Entity},label={lst_a2_model-user}, frame=single]
+/**
+ * USER Entity
+ */
+
+// load ORM
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var bcrypt = require('bcrypt-nodejs');
+
+// create user schema
+var UserSchema = new Schema({
+    name: String,
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    email: {
+        type:String,
+        unique: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    admin: Boolean,
+    created_at: Date,
+    updated_at: Date
+});
+
+// on every save set updated_at and salt password
+UserSchema.pre('save', function (next) {
+    var user = this;
+    var currentDate = new Date();
+
+    // set updated_at date
+    user.updated_at = currentDate;
+    // if created_at doesn't exist, add to field
+    if(!user.created_at)
+        user.created_at = currentDate;
+
+    // save salted password to database if modified
+    if (this.isModified('password') || this.isNew) {
+        bcrypt.genSalt(10, function (err, salt) {
+            if (err) {
+                return next(err);
+            }
+            bcrypt.hash(user.password, salt, null, function (err, hash) {
+                if (err) {
+                    return next(err);
+                }
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        return next();
+    }
+});
+
+// compare salted passwords
+UserSchema.methods.comparePassword = function (passwd, cb) {
+    bcrypt.compare(passwd, this.password, function (err, isMatch) {
+        if (err) {
+            return cb(err);
+        }
+        cb(null, isMatch);
+    });
+};
+
+module.exports = mongoose.model('User', UserSchema);
+\end{lstlisting}
+
+\newpage
+\subsection{Router"=Middleware zur absicherung der API}
+\label{subsub_a2_api-security}
+
+
+\begin{lstlisting}[caption={Mongoose Schema der User-Entity},label={lst_a2_model-user}, frame=single]
+// routes/api.js
+
+/**
+ * SECURITY: middleware to protect API
+ **********************************************/
+getToken = function (headers) {
+    if (headers && headers.authorization) {
+        return headers.authorization;
+        var parted = headers.authorization.split(' ');
+        if (parted.length === 2) {
+            return parted[1];
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+};
+
+router.use(function(req, res, next) {
+    console.log(req.headers);
+    // check header or url parameters or post parameters for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'] || getToken(req.headers);
+
+    // decode token
+    if (token) {
+        // verifies secret and checks exp
+        jwt.verify(token, config.secret, function(err, decoded) {
+            if (err) {
+                return res.status(403).json({ success: false, message: 'Failed to authenticate token.' });
+            } else {
+                // if everything is good, save to request for use in other routes
+                User.findOne({
+                    username: decoded.username
+                }, function(err, user) {
+                    if (err) throw err;
+
+                    if (!user) {
+                        return res.status(403).send({success: false, message: 'Authentication failed. User not found.'});
+                    } else {
+                        req.user = user;
+                        next();
+                    }
+                });
+            }
+        });
+    } else {
+        // if there is no token return an error
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+    }
+});
+\end{lstlisting}
