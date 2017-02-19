@@ -68,23 +68,29 @@ Die in Abschnitt \ref{subsec_konzeption_rest-api} geplante RESTful"=Schnittstell
 
 Um die Funktionalitäten der REST"=Schnittstelle zu überprüfen und zu untersuchen wird Postman\footnote{\textit{\url{https://www.getpostman.com/}}} verwendet. Dieses Tool ermöglicht es in einer grafischen Oberfläche Requests an eine URL zusammenzustellen und die entsprechenden Responses auszuwerten.
 
+\subsection{Cross Domain Requests}
 
+\todo{weiter ausführen und besser ausformulieren\ldots}
+Da die API"=Requests an eine andere URL gestellt werden, als die statischen Ressourcen bezogen werden, kommt es zu \code{Cross domain origin} Fehlern. Wir nutzen eine Router"=Middleware, um allen Responses unseres Applicationsservers die in \ref{lst_realisierung_router-cross-domain} aufgeführten \code{Access"=Controll}"=Header hinzuzufügen.
+
+\begin{lstlisting}[caption={Router-Middleware um jedem Response die \code{Access-Control}-Header hinzuzufügen},label={lst_realisierung_router-cross-domain}, frame=single]
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next(); // go to the next routes and don't stop here
+});
+\end{lstlisting}
+
+\newpage
 \section{Service Worker}
 \label{sec_realisierung_serviceworker}
 
-\subsection{Voraussetzungen}
-
-\subsubsection{Browser Support}
-
-\subsubsection{HTTPS}
-
-
-\subsection{Service Worker installieren}
+\subsection{Installation}
 
 Um einen Service Worker zu installieren, muss dieser zuerst für die entsprechende Webseite registriert werden. Listing \ref{lst_realisierung_register-service-worker} zeigt, wie der Service Worker registriert wird.\\
 Zuerst wird überprüft, ob der aktuelle Browser die Service Worker API unterstützt. Um den aktuellen Zustand des Service Workers beim Laden der Seite nachvollziehen zu können, wird dieser in die Debugging"=Konsole des Browsers geschrieben.\\
 Die \code{serviceWorker.register()}"=Methode erwartet als Parameter die Service Worker Konfigurationsdatei. Diese enthält \code{Listener}, die auf verschiedene \code{Events} reagieren und die eigentliche Funktionalitäten bereitstellen. Weiterhin kann dem Service Worker ein \code{scope} übergeben werden. Dieser definiert den Context, für den die Service Worker Registration gültig ist. \\
-Es ist also grundsätzlich möglich, mehrere Service Worker für eine Webanwendung zu registrieren. Jeder \code{scope} benötigt dabei eine eigene Konfigurationsdatei (diese muss sich direkt unter dem \code{scope}-Pfad befinden). Wird kein \code{scope} explizit angegeben, wird dieser aus dem Pfad der Konfigurationsdatei abgeleitet.
+Es ist also grundsätzlich möglich, mehrere Service Worker für eine Webanwendung zu registrieren. Jeder \code{scope} benötigt dabei eine eigene Konfigurationsdatei (diese muss sich direkt unter dem \code{scope}-Pfad befinden). Wird kein \code{scope} explizit angegeben, wird dieser aus dem Pfad der Konfigurationsdatei abgeleitet. \\
 
 \begin{lstlisting}[caption={Einrichtung Service Worker},label={lst_realisierung_register-service-worker}, frame=single]
 // js/app.js
@@ -98,7 +104,6 @@ if ('serviceWorker' in navigator)
             console.log('Service worker installed');
         else if(reg.active)
             console.log('Service worker active');
-
     }).catch(function(error)
     {
         // registration failed
@@ -107,6 +112,7 @@ if ('serviceWorker' in navigator)
 }
 \end{lstlisting}
 
+\newpage
 \subsection{Caching der statischen Ressourcen}
 
 Innerhalb der Service Worker Konfigurationsdatei wird unter anderem festgelegt, welche Ressourcen zwischengespeichert werden sollen, welche Caching"=Strategie vom Service Worker verfolgt wird und wie dieser Requests und eingehenden Responses verarbeiten soll. 
@@ -128,8 +134,9 @@ this.addEventListener('install', function(event) {
 });
 \end{lstlisting}
   
-Die Integration des JavaScript"=\code{Promise}="Konzepts ermöglicht es dem Service Worker im Hintergrund zu arbeiten und Anfragen asynchron zu bearbeiten. Es wird oft mit einer Verkettung von \code{Promises} gearbeitet, um auf den Abschluss einer Operation zu warten und anschließend weitere Operationen durchzuführen. Dabei kommen ebenfalls \code{callback}-Funktionen zum Einsatz, die das Ergebnis einer vorangegangenen Operation enthalten uns selbst wieder einen \code{Promise} darstellen.  
+Die Integration des JavaScript"=\code{Promise}"=Konzepts ermöglicht es dem Service Worker im Hintergrund zu arbeiten und Anfragen asynchron zu bearbeiten. Es wird oft mit einer Verkettung von \code{Promises} gearbeitet, um auf den Abschluss einer Operation zu warten und anschließend weitere Operationen durchzuführen. Dabei kommen ebenfalls \code{callback}-Funktionen zum Einsatz, die das Ergebnis einer vorangegangenen Operation enthalten und selbst wieder einen \code{Promise} darstellen.  
 
+\newpage
 Nachdem der Service Worker erfolgreich registriert und die statischen Ressourcen für das Caching eingerichtet sind, wird die Caching"=Strategie aus Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} umgesetzt. Wenn ein Request von der Webseite gestellt wird, empfängt der Service Worker \code{fetch}"=Events. Listing \ref{lst_realisierung_sw-caching} zeigt wie die Caching"=Strategie durch Verarbeitung möglicher Responses umgesetzt werden kann. \\
 
 \begin{lstlisting}[caption={Verarbeitung empfangener Requests und Auswertung möglicher Responses im Service Worker},label={lst_realisierung_sw-caching}, frame=single]
@@ -153,31 +160,53 @@ this.addEventListener('fetch', function(event) {
 });
 \end{lstlisting}
 
+\newpage
+\subsection{Background Sync API}
+\label{subsec_implementierung_background-sync}
 
-\subsection{Persistenz und Synchronisation des Application State}
+Ähnlich der Push"=Benachrichtigung verwendet Background Sync den Service Worker als Event"=Target. Dadurch können Synchronisationen durchgeführt werden, obwohl die betroffene Webseite nicht geöffnet ist oder gerade keine aktive Internetverbindung besteht. Um diese Funktionalität verwenden zu können, muss ein \code{sync} beim Service Worker registriert werden. \\
 
-\todo{Hier noch etwas über die Background.Sync API sagen\ldots}
+\begin{lstlisting}[caption={Registrierung Background Sync},label={lst_realisierung_register-background-sync}, frame=single]
+// js/app.js
+if ('serviceWorker' in navigator && 'SyncManager' in window) 
+{
+  navigator.serviceWorker.ready.then(function(reg) {
+    return reg.sync.register('appStateSync');
+  }).catch(function() {
+    // system was unable to register for a sync,
+    // this could be an OS-level restriction
+    postDataToServer();
+  });
+}
+else 
+{
+  // serviceworker/sync not supported
+  postDataToServer();
+}
+\end{lstlisting}
 
-\todo{Eventuell passt hier die ALternative PouchDB hin\ldots}
+Da nicht alle Browser die Background"=Sync"=Funktionalitäten unterstützen, jedoch Service Worker teilweise integriert haben, bietet es sich an eine erweiterte Prüfung durchzuführen. Listing \ref{lst_realisierung_register-background-sync} zeigt, wie neben der Service Worker Unterstützung auf Background Sync Funktionalität geprüft wird. \\
+Die Funktion \code{postDataToServer()} bildet den Fallback, falls Background Sync nicht unterstützt wird, und überträgt die Zustandsdaten über \glqq klassische\grqq{} Verfahren (vor Background Sync) mittels AJAX"=Requests.\\
 
-
-\subsubsection{Bereitstellung von benutzerspezifischem Payload}
-
-
-
-\subsection{Cross Domain Requests}
-
-\todo{weiter ausführen und besser ausformulieren\ldots}
-Da die API"=Requests an eine andere URL gestellt werden, als die statischen Ressourcen bezogen werden, kommt es zu \code{Cross domain origin} Fehlern. Wir nutzen eine Router"=Middleware, um allen Responses unseres Applicationsservers die in \ref{lst_realisierung_router-cross-domain} aufgeführten \code{Access"=Controll}"=Header hinzuzufügen.
-
-\begin{lstlisting}[caption={Router-Middleware um jedem Response die \code{Access-Control}-Header hinzuzufügen},label={lst_realisierung_router-cross-domain}, frame=single]
-router.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next(); // go to the next routes and don't stop here
+\begin{lstlisting}[caption={\code{sync}"=EventListener in der Service Worker Konfigurationsdatei},label={lst_realisierung_sw-background-sync}, frame=single]
+// sw.js
+this.addEventListener('sync', function(event) 
+{
+  if (event.tag == 'appStateSync') 
+    event.waitUntil(syncLocalDatabase());
 });
 \end{lstlisting}
 
+
+ 
+
+\todo{Eventuell passt hier die ALternative PouchDB hin\ldots}
+
+\subsection{Web Push API}
+
+\subsubsection{Bereitstellung von benutzerspezifischem Payload}
+
+\subsection{Notification API}
 
 \subsection{Push-Benachrichtigungen}
 
