@@ -18,9 +18,9 @@ Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenige
 
 \todo{weiter ausführen, was damit gemeint ist\ldots}
 
-\paragraph{[FA-1] Single Page (Mobil) Application.} Die Webanwendung wird als hybride Single Page Application entwickelt. Der Sitzungszustand (\glqq Application State\grqq) wird auf dem Client gespeichert und im Hintergrund mit dem Applicationserver synchronisiert. Die Präsentationslogik wird in der \glqq Boot"=Phase\grqq{} einmal vom Client geladen und Inhalte zur Laufzeit dynamisch angepasst. Während der Navigation wird der Präsentationsfluss im Client nicht angehalten bzw. durch \glqq Neuladen\grqq{} unterbrochen.
+\paragraph{[FA-1] Single Page (Mobil) Application.} Die Webanwendung wird als hybride Single Page Application entwickelt. Der Sitzungszustand (\glqq Application State\grqq) wird auf dem Client gespeichert und im Hintergrund mit dem Applicationserver synchronisiert. Die Präsentationslogik wird in der \glqq Boot"=Phase\grqq{} einmal vom Client geladen und Inhalte zur Laufzeit dynamisch angepasst. Während der Navigation wird der Präsentationsfluss im Client nicht angehalten bzw. durch \glqq neu Laden\grqq{} unterbrochen.
 
-\paragraph{[FA-2] Offlinefähigkeit.} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die hybride Webanwendung Mechanismen zum Vorhalten der statischen Ressourcen und des Sitzungszustands der Anwendung (\glqq Application State\grqq) im Offlinmodus. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
+\paragraph{[FA-2] Offlinefähigkeit.} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die progressive Webanwendung Mechanismen zum Vorhalten der statischen Ressourcen und des Sitzungszustands der Anwendung (\glqq Application State\grqq) im Offlinemodus. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
 
 \paragraph{[FA-3] Push-Benachrichtigungen.} Benutzer der Webanwendung werden unabhängig vom verwendeten Endgerät über bestimmte Ereignisse mit Hilfe von Push"=Benachrichtigungen informiert. Diese Ereignisse werden vom Applicationserver ausgelöst/verarbeitet und dieser initiiert Push"=Benachrichtigungen beim Client. 
 
@@ -45,7 +45,7 @@ Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen die
 
 \todo{weiter ausführen, was damit gemeint ist\ldots}
 
-\paragraph{[NFA-1] Look \& Feel einer nativen Android"=App.} Die Website soll sich optisch an den \glqq Material Design\grqq "=Richtlinien für Android"=Applikationen orientieren. Auf mobilen Endgeräten soll die Touch"=Unterstützung genauso gewährleistet sein, wie die smartphonetypischen Wisch"=Geseten. Das Framework \glqq JQuery"=Mobile\grqq{} mit zugehörigem UI"=Framework \glqq JQuery"=Mobile"=UI\grqq{} kann als JQuery"=Erweiterung zu diesem Zweck eingesetzt werden.
+\paragraph{[NFA-1] Look \& Feel einer nativen Android"=App.} Die Website soll sich optisch an den \glqq Material Design\grqq "=Richtlinien für Android"=Applikationen orientieren. Auf mobilen Endgeräten soll die Touch"=Unterstützung genauso gewährleistet sein, wie die für Smartphones typischen Wisch"=Gesten. Das Framework \glqq JQuery"=Mobile\grqq{} mit zugehörigem UI"=Framework \glqq JQuery"=Mobile"=UI\grqq{} kann als JQuery"=Erweiterung zu diesem Zweck eingesetzt werden.
 
 \paragraph{[NFA-2] Benutzerauthentifizierung.} Benutzer können sich für die Nutzung der Anwendung Registrieren und anschließend Anmelden. Für die Registrierung ist ein eindeutiger Benutzername mit Angabe einer E-Mail Adresse sowie ein Passwort notwendig.
 
@@ -53,7 +53,7 @@ Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen die
 
 \paragraph{[NFA-4] Aufgaben anlegen, bearbeiten und löschen.} Ein authentifizierter Benutzer kann Aufgaben anlegen und anschließend Bearbeiten oder Löschen. Eine Aufgabe muss einen Titel besitzen. Optional kann eine Beschreibung und ein Fälligkeitsdatum hinterlegt werden.
 
-\paragraph{[NFA-5] Aufgaben teilen.} Aufgaben können mit mehreren Benutzer geteilt werden. Benutzer werden über die Einladung zu einer Aufgabe informiert. Nachdem die Einladung bestätigt wurde, wird ein Benutzer über Änderungen an der Aufgabe benachrichtigt.
+\paragraph{[NFA-5] Aufgaben teilen.} Aufgaben können mit mehreren Benutzern geteilt werden. Benutzer werden über die Einladung zu einer Aufgabe informiert. Nachdem die Einladung bestätigt wurde, wird ein Benutzer über Änderungen an der Aufgabe benachrichtigt.
 
 \paragraph{[NFA-6] Ereignisse für Benachrichtigungen.} Benutzer werden über Freundschaftsanfragen und Änderungen an Aufgaben informiert, in denen sie involviert sind. Benachrichtigungen werden nur angezeigt, wenn die Webanwendung nicht aktiv ist. Die Website gilt als \glqq aktiv\grqq, wenn sie auf dem Bildschirm angezeigt wird. \\
 Folgende Ereignisse lösen eine Benachrichtigung aus:
