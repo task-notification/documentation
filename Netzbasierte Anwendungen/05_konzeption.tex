@@ -54,11 +54,11 @@ Das \code{cacheFirst}-Verfahren bietet sich für den vorliegenden Anwendungsfall
 \subsection{lokale persistente Speicherung und Synchronisation des Application State}
 \label{subsec_konzeption_caching-modell}
 
-Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die progressive Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
+Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die progressive Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb oder bei schlechter Verbindung bereitzustellen und es bei aktiver Internetverbindung mit einem entfernten Server synchronisieren zu können.
 
-\todo{Hier noch etwas über die Background.Sync API sagen\ldots}
-
-\todo{Mehr Inhalt\ldots}
+Genau diese Anforderungen lassen sich mit der Background Sync API erfüllen. Diese reagiert auf Events, die ausgelöst werden, wenn eine aktive Interverbindung hergestellt wird. \\
+Das \code{sync} Event wird u.a. ausgelöst, wenn die entsprechende Webseite geöffnet wird und wenn eine Netzwerkverbindung wiederhergestellt wird. Damit bietet sich diese Technologie an, um den Application State im Hintergrund zu aktualisieren und im Offlinebetrieb oder bei schlechter Verbindung in einer Warteschlange zu positionieren, die abgearbeitet wird. \\
+Im Fall der schlechten Verbindung würde diese Abarbeitung im Hintergrund stattfinden, auch wenn diese mehr Zeit in Anspruch nimmt. Wenn keine Internetverbindung verfügbar ist, wird die Warteschlange abgearbeitet, sobald eine Verbindung möglich ist. In beiden Fällen kann der Benutzer weiter mit der Webanwendung interagieren.
 
 \newpage
 \section{Web Push}
@@ -96,7 +96,7 @@ Auf Serverseite wird der Endpoint und alle erforderlichen Details, wie die Sende
 \begin{figure}[htp] \centering{
 \centering
 \includegraphics[width=0.9\textwidth]{images/architektur_serviceworker_push.pdf}}
-\caption{Push mittels Serviceworker (in Anlehnung an MozillaWiki \cite{MOZ_WIKI})}
+\caption{Push mittels Serviceworker (in Anlehnung an MozillaWiki)}
 \quelle\url{https://wiki.mozilla.org/File:PushNotificationsHighLevel.png}
 \label{image_konzeption_architektur-serviceworker-push}
 \end{figure} 

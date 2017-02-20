@@ -7,7 +7,8 @@ Das folgende Kapitel beschreibt die Umsetzung der im vorherigen Kapitel beschrie
 \subsection{Node.js Express"=Server}
 \label{subsec_implementierung_applicationserver}
 
-Neben einer Datenbank bietet der Applicationserver die Funktionalitäten eines Webservers. Als Backend"=Plattform wird Node.js eingesetzt und mit Hilfe von \code{Node Express} ist in wenigen Schritten ein voll-funktionsfähiger Webserver installiert und eingerichtet. \\
+Neben einer Datenbank bietet der Applicationserver die Funktionalitäten eines Webservers. \\
+Als Backend"=Plattform wird Node.js eingesetzt und mit Hilfe von \code{Node Express} ist in wenigen Schritten ein voll"-funktionsfähiger Webserver installiert und eingerichtet. \\
 
 \begin{lstlisting}[caption={package.json - notwendige Node.js Pakete},label={lst_realisierung_package.json}, frame=single]
 {
@@ -125,9 +126,11 @@ router.use(function(req, res, next) {
     next(); // go to the next routes and don't stop here
 });
 \end{lstlisting}
-
+\newpage
 \section{Service Worker}
 \label{sec_realisierung_serviceworker}
+
+An dieser Stelle sei besonders erwähnt, dass die Service Worker API eine Verbindung über \code{https} erfordert. Für diese Verbindung muss ebenfalls ein gültiges Serverzertifikat vorliegen. Einzig in der Entwicklung im Umfeld von \url{localhost} ist eine unverschlüsselte Kommunikation über \url{http} möglich.
 
 \subsection{Installation}
 
@@ -179,6 +182,7 @@ this.addEventListener('install', function(event) {
   
 Die Integration des JavaScript"=\code{Promise}"=Konzepts ermöglicht es dem Service Worker im Hintergrund zu arbeiten und Anfragen asynchron zu bearbeiten. Es wird oft mit einer Verkettung von \code{Promises} gearbeitet, um auf den Abschluss einer Operation zu warten und anschließend weitere Operationen durchzuführen. Dabei kommen ebenfalls \code{callback}-Funktionen zum Einsatz, die das Ergebnis einer vorangegangenen Operation enthalten und selbst wieder einen \code{Promise} darstellen.  
 
+\newpage
 Nachdem der Service Worker erfolgreich registriert und die statischen Ressourcen für das Caching eingerichtet sind, wird die Caching"=Strategie aus Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} umgesetzt. Wenn ein Request von der Webseite gestellt wird, empfängt der Service Worker \code{fetch}"=Events. Listing \ref{lst_realisierung_sw-caching} zeigt wie die Caching"=Strategie durch Verarbeitung möglicher Responses umgesetzt werden kann. \\
 
 \begin{lstlisting}[caption={Verarbeitung empfangener Requests und Auswertung möglicher Responses im Service Worker},label={lst_realisierung_sw-caching}, frame=single]
@@ -189,6 +193,9 @@ this.addEventListener('fetch', function(event) {
     event.respondWith(
       // try to find cached resource
       caches.match(event.request).catch(function() {
+        // fetch network request
+        return fetch(event.request);
+      }), function() { // Not fired due to the catch
         // fetch network request
         return fetch(event.request).then(function(response) {
           // save resource to cache
@@ -201,9 +208,6 @@ this.addEventListener('fetch', function(event) {
     );
 });
 \end{lstlisting}
-
-
-Während der Implementierung hat es sich als praktisch erwiesen, die ursprünglich geplante Caching"=Strategie anzupassen. Statt den Cache nach erfolgreichem Response über das Netzwerk zu aktualisieren, wird der Request au \todo{schauen, was wir wirklich am sinnvillsten umsetzen....}
 
 \newpage
 \subsection{Push"=Nachrichten abonnieren}
@@ -236,6 +240,7 @@ navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
 Nachdem geprüft wurde, ob für den aktiven Service Worker bereits eine \code{PushSubscription} vorhanden ist (siehe Listing \ref{lst_realisierung_sw-push-subscribe}), wird entweder die \code{PushSubscription} an den Applicationserver übertragen (\code{sendSub()}"=Funktion) oder eine Anmeldung beim Push"=Service innerhalb der Methode \code{subscribePush()}) initiiert. 
 Nach erfolgreicher Anmeldung mittels \code{PushManager.subscribe()} wird die zurückgegebene \code{PushSubscription} mit Hilfe der Funktion \code{sendSub()} an den Applicationserver übertragen. Im Anhang \ref{sec_a3_sw-push-functions} sind die Funktionen für die Anmeldung, Abmeldung und Übertragung der \code{PushSubscription} aufgeführt.
 
+\newpage
 \subsubsection{Endpoint auf Applicationserver speichern}
 
 Die im Anhang \ref{sec_a3_sw-push-functions} aufgeführte \code{sendSub()}"=Funktion ist dafür verantwortlich, die Endpoint"=Informationen auf den Applicationserver zu übertragen. \\

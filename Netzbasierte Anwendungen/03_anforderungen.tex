@@ -1,18 +1,20 @@
 \chapter{Anforderungen}
 \label{chp_anforderungen}
 
-Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlegen, bearbeiten, anzeigen und löschen. Weiterhin gibt es eine Kontaktliste, in welcher alle Kontakte angezeigt werden, die ebenfalls für die Anwendung registriert sind und zu persönlichen Kontakten hinzugefügt wurden. Aufgaben können mit persönlichen Kontakten geteilt werden. 
+Um die Möglichkeiten der Service Worker Technologie untersuchen zu können, wird eine relativ simple Webanwendung konstruiert. Diese dient als gedankliches Gerüst, um der Technologie einen praktischen Aufhänger zu geben. Es ist nicht Anspruch der Arbeit, eine voll"=funktionsfähige Webanwendung zu entwickeln.
 
-Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH"=Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH"=Notification angezeigt sobald die Aufgabe terminiert.
+Nach erfolgreicher Registrierung und Anmeldung können Aufgaben angelegt, bearbeitet, angezeigt und gelöscht werden. Eine Kontaktliste ermöglicht es, Benutzer, die ebenfalls für die Anwendung registriert sind, zu einer persönlichen Freundesliste hinzuzufügen. Push"=Benachrichtigungen informieren Benutzer über erhaltene Freundschaftsanfragen bzw. über Annahme/Verweigerung einer Anfrage. 
 
-\todo{Die Beispielanwendung als Einsatzszenario beschreiben\ldots}
+Erstellte Aufgaben können mit Freunden geteilt werden. Der Besitze einer Aufgabe hat die Möglichkeit, die Aufgabe weiter zu bearbeiten bzw. zu löschen. Alle involvierten Benutzer werden über Änderungen an einer Aufgabe mittels Push"=Benachrichtigungen informiert. 
+
+Die Website soll dem Benutzer das Look \& Feel einer nativen Android"=App vermitteln. Die Verwendung soll unabhängig einer aktiven Netzwerkverbindung reibungslos funktionieren. Außerdem soll diese als \glqq Progressive Webanwendung\grqq{} entwickelt werden. 
 
 \section{funktionale Anforderungen}
 \label{sec_anforderungen_funktionale-anforderungen}
 
 Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenigen verstanden, welche zur direkten Zielerfüllung beitragen. Darunter zählen die Anforderung einer \glqq Single Page Application\grqq , Bereitstellung einer geeigneten Offline"=Benutzererfahrung sowie die Unterstützung von Push"=Benachrichtigungen in mobile Webanwendungen. Die Schnittstelle zum Applicationserver wird ebenfalls unter den funktionalen Anforderungen geführt.
 
-\paragraph{[FA-1] Single Page (Mobil) Application.} Die Webanwendung wird als hybride Single Page Application entwickelt. Der Sitzungszustand (\glqq Application State\grqq) wird auf dem Client gespeichert und im Hintergrund mit dem Applicationserver synchronisiert. Die Präsentationslogik wird in der \glqq Boot"=Phase\grqq{} einmal vom Client geladen und Inhalte zur Laufzeit dynamisch angepasst. Während der Navigation wird der Präsentationsfluss im Client nicht angehalten bzw. durch \glqq neu Laden\grqq{} unterbrochen.
+\paragraph{[FA-1] Single Page (Mobil) Application.} Die Webanwendung wird als hybride Single Page Application entwickelt. Der Sitzungszustand (\glqq Application State\grqq) wird auf dem Client gespeichert und im Hintergrund mit dem Applicationserver synchronisiert. Sowohl die statischen Ressourcen als auch die Präsentationslogik werden in der \glqq Boot"=Phase\grqq{} einmal vom Client geladen und Inhalte zur Laufzeit dynamisch angepasst. Während der Navigation wird der Präsentationsfluss im Client nicht angehalten bzw. durch \glqq neu Laden\grqq{} unterbrochen.
 
 \paragraph{[FA-2] Offlinefähigkeit.} Die Benutzung der Webanwendung soll nicht ausschließlich bei bestehender Internetverbindung, sondern ebenfalls Offline reibungslos möglich sein. Dazu bietet die progressive Webanwendung Mechanismen zum Vorhalten der statischen Ressourcen und des Sitzungszustands der Anwendung (\glqq Application State\grqq) im Offlinemodus. Benutzer werden über ggf. eingeschränkte Funktionalitäten informiert, während keine aktive Internetverbindung vorhanden ist.
 
