@@ -51,7 +51,7 @@ Tabelle \ref{tbl_konzeption_caching-strategien} zeigt die fünf grundsätzlich m
 
 Das \code{cacheFirst}-Verfahren bietet sich für den vorliegenden Anwendungsfall an; die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend versucht, diese im Hintergrund mit Ressourcen aus dem Internet zu aktualisieren (vgl. Abbildung \ref{image_konzept_caching-strategie}). Dadurch wird die Seite unabhängig vom Onlinezustand bei Anforderung schnell geladen und dem Benutzer eine optimale Offline-Benutzererfahrung ermöglicht.
 
-\subsection{lokale peristente Speicherung und Synchronisation des Application State}
+\subsection{lokale persistente Speicherung und Synchronisation des Application State}
 \label{subsec_konzeption_caching-modell}
 
 Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die hybride Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
@@ -115,7 +115,7 @@ Da wir uns gegen eine Nutzdatensendung über den Browserhersteller entschieden h
 \section{Architekturbeschreibung}
 \label{sec_konzeption_serviceworker_architektur}
 
-Die Anwendung beruht auf dem Client"=Server"=Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI"= und Serviceworker"=Logik ist die gesamte Geschäftslogik auf einen Business-Server (Applicationserver) ausgelagert. Die zentrale Datenbank sowie die statischen Ressourcen zur Darstellung des Client werden ebenfalls vom Applicationserver bereitgestellt. Für die Kommunikation steht eine RESTful"=Schnittstelle zur Verfügung.
+Die Anwendung beruht auf dem Client"=Server"=Prinzip. Dabei stellt der Client lediglich die Oberfläche zur Interaktion mit dem Anwender dar. Außer der notwendigen UI"= und Service Worker"=Logik ist die gesamte Geschäftslogik auf einen Business-Server (Applicationserver) ausgelagert. Die zentrale Datenbank sowie die statischen Ressourcen zur Darstellung des Client werden ebenfalls vom Applicationserver bereitgestellt. Für die Kommunikation steht eine RESTful"=Schnittstelle zur Verfügung.
 
 \begin{figure}[htp] \centering{
 \includegraphics[width=0.9\textwidth]{images/architektur_serviceworker.pdf}}
