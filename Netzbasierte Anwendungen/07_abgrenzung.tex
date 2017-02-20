@@ -4,6 +4,13 @@
 
 ... Was ist eventuell zukünftig möglich ? ...
 
+\section{Background Sync }
+
+We're aiming to ship background sync to a stable version of Chrome in the first half of 2016. But we’re also working on a variant, “periodic background sync”. This will allow you to request a “periodicsync” event restricted by time interval, battery state and network state. This would require user permission, of course, but it will also be down to the will of the browser for when and how often these events fire. E.g., a news site could request to sync every hour, but the browser may know you only read that site at 07:00, so the sync would fire daily at 06:50. This idea is a little further off than one-off syncing, but it’s coming.
+
+Bit by bit we’re bringing successful patterns from Android/iOS onto the web, while still retaining what makes the web great!
+
+
 \section{Fazit}
 
 Offlinefähigkeit ist ein sehr interessantes Feature, das die Benutzererfahrung mit mobilen Anwendungen erheblich verbessern kann. Wenn der Anwender ständigen Verbindungsabbrüchen ausgesetzt ist, scheint diese Funktionalität ein unabdingbares Element der modernen Entwicklung von mobilen Apps zu sein.

@@ -1,6 +1,6 @@
 \chapter{Implementierung}
 
-Das folgende Kapitel beschreibt die Umsetzung der im vorherigen Kapitel beschriebenen Konzeption. Dabei wird sich sowohl bei der serverseitigen als auch clientseitigen Implementierung auf die \todo{anderes Wort?}[Bereiche] konzentriert, die für die Verwendung der Service Worker Technologie und die Erfüllung der Projektaufgabe notwendig sind. Die Umsetzung der grafischen Benutzeroberfläche ist damit nicht Bestandteil dieser Dokumentation.
+Das folgende Kapitel beschreibt die Umsetzung der im vorherigen Kapitel beschriebenen Konzeption. Dabei wird sich sowohl bei der serverseitigen als auch clientseitigen Implementierung auf die notwendigen Schritte konzentriert, die für die Verwendung der Service Worker Technologie und die Erfüllung der Projektaufgabe erforderlich sind. Die Umsetzung der grafischen Benutzeroberfläche, Installation von MongoDB, sowie die Einrichtung der IndexedDB sind damit nicht Bestandteil dieser Dokumentation.
 
 \section{Applicationserver}
 
@@ -42,7 +42,7 @@ Die Umsetzung des Datenbankschemas in MongoDB sowie das objektrelationale Mappin
 
 Eine genaue Beschreibung der Einrichtung einer Node.js"=Anwendung ist nicht Bestandteil dieser Dokumentation und soll nicht weiter beleuchtet werden. An dieser Stelle sei an zahlreiche Anleitungen im Internet verwiesen.
 
-\subsection{Datenbank"=Server}
+\subsection{Datenbank"=Server anbinden}
 \label{subsec_implementierung_datenbank}
 
 Für die persistente Speicherung der Daten auf Serverseite wird ein MongoDB"=Server aufgesetzt. Die genaue Installation und Einrichtung ist nicht Bestandteil dieser Dokumentation. \\
@@ -62,16 +62,61 @@ module.exports = {
 
 \subsection{REST-Schnittstelle}
 
-Die in Abschnitt \ref{subsec_konzeption_rest-api} geplante RESTful"=Schnittstelle wird im Node.js Express"=Server umgesetzt. Jeder Request, der sich direkt auf die Anforderung von benutzerspezifischen Ressourcen bezieht erfordert einen gültigen Authentifizierungstoken (vgl. Anhang \ref{subsub_a2_api-security}). Dadurch ist es möglich innerhalb der Routing"=Methoden direkt auf die User"=Entity zuzugreifen und damit nur die Daten zu übermitteln, die den anfragenden Benutzer zugeordnet sind.
+Die in Abschnitt \ref{subsec_konzeption_rest-api} geplante RESTful"=Schnittstelle wird im Node.js Express"=Server umgesetzt. Jeder Request, der sich direkt auf die Anforderung von benutzerspezifischen Ressourcen bezieht, erfordert einen gültigen Authentifizierungstoken (vgl. Anhang \ref{subsub_a2_api-security}). Es ist möglich aus dem Token den Benutzer abzuleiten und aus der Datenbank abzufragen. Wenn ein gültiger Benutzer gefunden wurde, kann das serialisierte Objekt zum eigentlichen Request hinzugefügt und die Anforderung an die entsprechende Route weitergegeben werden (\glqq Router"=Middleware\grqq).\\
+Damit kann innerhalb der folgenden Routing"=Methoden direkt auf die User"=Entity zugegriffen und damit nur die Daten zu übermitteln werden, die den anfragenden Benutzer zugeordnet sind. Listing \ref{lst_realisierung_router} verdeutlicht dies beispielhaft an den \url{/api/tasks}"=Routen. In Zeile 9 bzw. Zeile 26 wird auf die User"=Entity zugegriffen, welche zuvor serverseitig aus dem JWT"=Token ausgelesen, aus der Datenbank abgefragt und dem Request hinzugefügt wurde. \\
 
+\begin{lstlisting}[caption={Verbindung zur Datenbank konfigurieren},label={lst_realisierung_router}, frame=single]
+// routes/api.js 
+...
+router.route('/tasks')
+    // create a task (accessed from POST /api/tasks)
+    .post(function(req, res){
+        // create a new instance of Task model
+        var task = new Task();                      
+        // get user from request
+        var user = req.user;                        
+        // set description from the request
+        task.description = req.body.description; 
+        // set user   
+        task.user = user._id;
+        
+        // save task and check for error
+        task.save(function(err){
+            if(err)
+                res.send(err);
+            res.json({ message: 'Task created!'});
+        });
+    })
+
+    // get all tasks (accessed from GET /api/tasks)
+    .get(function(req, res){
+        var user = req.user;                  
+        Task.find({ user: user._id }, function (err, tasks) {
+            if(err)
+                res.send(err);
+            res.json(tasks);
+        });
+    });
+...
+\end{lstlisting}
+
+\newpage
 \subsubsection{Test der REST-API}
 
-Um die Funktionalitäten der REST"=Schnittstelle zu überprüfen und zu untersuchen wird Postman\footnote{\textit{\url{https://www.getpostman.com/}}} verwendet. Dieses Tool ermöglicht es in einer grafischen Oberfläche Requests an eine URL zusammenzustellen und die entsprechenden Responses auszuwerten.
+Um die Funktionalitäten der REST"=Schnittstelle zu überprüfen und zu untersuchen wird Postman\footnote{\textit{\url{https://www.getpostman.com/}}} verwendet. Dieses Tool ermöglicht es in einer grafischen Oberfläche Requests an eine URL zusammenzustellen und die entsprechenden Responses auszuwerten. \\
 
-\subsection{Cross Domain Requests}
+\begin{figure}[htp] \centering{
+\includegraphics[width=0.85\textwidth]{images/postman.png}}
+\caption{Postman: \glqq Auflistung aller Aufgaben eines authentifizierten Benutzers\grqq}
+\label{image_implementierung_postman}
+\end{figure} 
 
-\todo{weiter ausführen und besser ausformulieren\ldots}
-Da die API"=Requests an eine andere URL gestellt werden, als die statischen Ressourcen bezogen werden, kommt es zu \code{Cross domain origin} Fehlern. Wir nutzen eine Router"=Middleware, um allen Responses unseres Applicationsservers die in \ref{lst_realisierung_router-cross-domain} aufgeführten \code{Access"=Controll}"=Header hinzuzufügen.
+\newpage
+\subsection{Cross-Origin Resource Sharing}
+
+Wenn eine Webseite von einer anderen Domain, als die des Servers, Requests stellt, unterbindet normalerweise die Same"=Origin"=Policy (SOP) solche Zugriffe. Mittels Cross"=Origin Resource Sharing (CORS) ist es möglich, für bestimmte Domains derartige Anfragen an einen Server zu erlauben. 
+
+Wir nutzen eine weitere Router"=Middleware, um allen Responses unseres Applicationsservers die in Listing \ref{lst_realisierung_router-cross-domain} aufgeführten \code{Access"=Control}"=Header hinzuzufügen. Für die Entwicklungsumgebung ist es vertretbar, sämtlichen Hosts (\code{(*)})den Zugriff zu erlauben. In einer Produktivumgebung würde man ausschließlich die Client"=Webserver"=Domain berechtigen. \\
 
 \begin{lstlisting}[caption={Router-Middleware um jedem Response die \code{Access-Control}-Header hinzuzufügen},label={lst_realisierung_router-cross-domain}, frame=single]
 router.use(function(req, res, next) {
@@ -81,7 +126,6 @@ router.use(function(req, res, next) {
 });
 \end{lstlisting}
 
-\newpage
 \section{Service Worker}
 \label{sec_realisierung_serviceworker}
 
@@ -112,7 +156,6 @@ if ('serviceWorker' in navigator)
 }
 \end{lstlisting}
 
-\newpage
 \subsection{Caching der statischen Ressourcen}
 
 Innerhalb der Service Worker Konfigurationsdatei wird unter anderem festgelegt, welche Ressourcen zwischengespeichert werden sollen, welche Caching"=Strategie vom Service Worker verfolgt wird und wie dieser Requests und eingehenden Responses verarbeiten soll. 
@@ -136,7 +179,6 @@ this.addEventListener('install', function(event) {
   
 Die Integration des JavaScript"=\code{Promise}"=Konzepts ermöglicht es dem Service Worker im Hintergrund zu arbeiten und Anfragen asynchron zu bearbeiten. Es wird oft mit einer Verkettung von \code{Promises} gearbeitet, um auf den Abschluss einer Operation zu warten und anschließend weitere Operationen durchzuführen. Dabei kommen ebenfalls \code{callback}-Funktionen zum Einsatz, die das Ergebnis einer vorangegangenen Operation enthalten und selbst wieder einen \code{Promise} darstellen.  
 
-\newpage
 Nachdem der Service Worker erfolgreich registriert und die statischen Ressourcen für das Caching eingerichtet sind, wird die Caching"=Strategie aus Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} umgesetzt. Wenn ein Request von der Webseite gestellt wird, empfängt der Service Worker \code{fetch}"=Events. Listing \ref{lst_realisierung_sw-caching} zeigt wie die Caching"=Strategie durch Verarbeitung möglicher Responses umgesetzt werden kann. \\
 
 \begin{lstlisting}[caption={Verarbeitung empfangener Requests und Auswertung möglicher Responses im Service Worker},label={lst_realisierung_sw-caching}, frame=single]
@@ -160,8 +202,112 @@ this.addEventListener('fetch', function(event) {
 });
 \end{lstlisting}
 
+
+Während der Implementierung hat es sich als praktisch erwiesen, die ursprünglich geplante Caching"=Strategie anzupassen. Statt den Cache nach erfolgreichem Response über das Netzwerk zu aktualisieren, wird der Request au \todo{schauen, was wir wirklich am sinnvillsten umsetzen....}
+
 \newpage
-\subsection{Background Sync API}
+\subsection{Push"=Nachrichten abonnieren}
+
+Damit eine Webanwendung Push"=Nachrichten erhalten und verarbeiten kann, benötigt sie einen aktiven Service"=Worker. Dieser kann sich mittels \code{PushManager.subscribe()} für Push"=Nachrichten anmelden. Der in Abschnitt \ref{sec_konzeption_serviceworker_architektur} beschriebene Ablauf wurde wie geplant umgesetzt. \\
+
+\begin{lstlisting}[caption={Service Worker: Anmeldung am Push"=Server},label={lst_realisierung_sw-push-subscribe}, frame=single]
+// resources/js/app.js
+navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
+    serviceWorkerRegistration.pushManager.getSubscription().then(
+        function(pushSubscription) {
+            if(pushSubscription)
+            {
+                console.log("Push Subscription exists");
+                // send subscription to application server
+                sendSub(pushSubscription);
+            }
+            else
+            {
+                console.log("Push Subscription not existing");
+                // create subscription
+                subscribePush();
+            }
+        }.bind(this)).catch(function(e) {
+        console.error('Error getting subscription', e);
+    });
+});
+\end{lstlisting}
+
+Nachdem geprüft wurde, ob für den aktiven Service Worker bereits eine \code{PushSubscription} vorhanden ist (siehe Listing \ref{lst_realisierung_sw-push-subscribe}), wird entweder die \code{PushSubscription} an den Applicationserver übertragen (\code{sendSub()}"=Funktion) oder eine Anmeldung beim Push"=Service innerhalb der Methode \code{subscribePush()}) initiiert. 
+Nach erfolgreicher Anmeldung mittels \code{PushManager.subscribe()} wird die zurückgegebene \code{PushSubscription} mit Hilfe der Funktion \code{sendSub()} an den Applicationserver übertragen. Im Anhang \ref{sec_a3_sw-push-functions} sind die Funktionen für die Anmeldung, Abmeldung und Übertragung der \code{PushSubscription} aufgeführt.
+
+\subsubsection{Endpoint auf Applicationserver speichern}
+
+Die im Anhang \ref{sec_a3_sw-push-functions} aufgeführte \code{sendSub()}"=Funktion ist dafür verantwortlich, die Endpoint"=Informationen auf den Applicationserver zu übertragen. \\
+Neben dem Endpoint und der Subscription"=ID wird eine eindeutige \code{DeviceID} sowie ein optionaler Gerätename übertragen. 
+
+Der Applicationserver speichert diese Informationen in der Datenbank bzw. aktualisiert einen bereits vorhandenen \code{Device}"=Eintrag für den entsprechenden Benutzer und der \code{DeviceID}. Die \code{DeviceID} wird mit Hilfe der \code{Fingerprint2}"=Bibliothek\footnote{\textit{\url{https://github.com/Valve/fingerprintjs2}}} generiert und ist für jedes Gerät und Browser eindeutig. \\ 
+
+\begin{lstlisting}[caption={Bei Seitenstart prüfen, ob eine DeviceID vorhanden ist und ggf. anlegen},label={lst_realisierung_deviceId}, frame=single]
+// CHECK if unique device id exists
+$(document).ready(function(){
+
+    // store device id
+    var deviceId = localStorage.getItem("deviceId");
+    if(deviceId === null)
+    {
+        new Fingerprint2().get(function(result, components){
+            localStorage.setItem("deviceId", result);
+            console.log("Set deviceId: " + result); //a hash, representing your device fingerprint
+        });
+    }
+    console.log("DeviceID: " + deviceId);
+});
+\end{lstlisting}
+
+\subsubsection{Verarbeitung von \code{Push}-Events}
+
+Wenn der Service Worker eine Push"=Nachricht empfängt, wird das Event \code{push} ausgelöst. In der Service Worker Konfigurationsdatei wird dafür ein \code{EventListener} registriert. Listing \ref{lst_realisierung_push-event-listener} zeigt, wie bei eintreffenden Push"=Benachrichtigungen beim Applicationserver der zugehörige Payload angefragt wird. \\
+Wenn der empfangene Payload den Type \code{update} trägt, bedeutet dies, dass sich im \code{body} Aktualisierungen des Models verbergen. Daraufhin wird die Funktion \code{updateIndexedDb()} aufgerufen. Als Parameter erwartet diese ein mehrdimensionales Array aus serialisierten Objekten. Diese sind mit einem Timestamp versehen und werden ggf. in der lokalen Datenbank aktualisiert. \\
+
+\begin{lstlisting}[caption={Service Worker \code{push}"=EventListener},label={lst_realisierung_push-event-listener}, frame=single]
+// sw.js
+self.addEventListener('push', function(event) {
+    console.log('Push message', event);
+
+    event.waitUntil(getEndpoint().then(function(endpoint){
+        var subId = endpoint.split("/").pop();
+        var request = new Request(PUSH_URL + "/payload/"+subId, {
+            method: 'GET',
+            mode: 'cors',
+            redirect: 'follow'
+        });
+        return fetch(request);
+    }).then(function(res) {
+        res.json().then(function(data){
+            if(data.type == "update")
+            {
+                updateIndexedDb(data.body);
+            }
+            else
+            {
+                // Show notification
+                self.registration.showNotification(data.title, {
+                    'body': data.body,
+                    'icon': data.icon
+                });
+            }
+            console.log(data);
+        })
+    });
+});
+\end{lstlisting}
+
+In dem Fall, dass der Payload nicht den Typ \code{update} trägt, wird davon ausgegangen, dass eine \code{Push"=Notification} angezeigt werden soll. Der Payload enthält die notwendigen Attribute, um eine Benachrichtigung anzuzeigen (vgl. Abbildung \ref{image_implementierung_notification}). Benachrichtigungen werden sowohl auf mobilen Endgeräten als auch auf Desktop"=PC`s angezeigt. \\
+
+\begin{figure}[htp] \centering{
+\includegraphics[width=0.4\textwidth]{images/notification.png}}
+\caption{Beispiel Anzeige einer Desktop"=Benachrichtigung}
+\label{image_implementierung_notification}
+\end{figure} 
+
+\newpage
+\subsection{Background Sync}
 \label{subsec_implementierung_background-sync}
 
 Ähnlich der Push"=Benachrichtigung verwendet Background Sync den Service Worker als Event"=Target. Dadurch können Synchronisationen durchgeführt werden, obwohl die betroffene Webseite nicht geöffnet ist oder gerade keine aktive Internetverbindung besteht. Um diese Funktionalität verwenden zu können, muss ein \code{sync} beim Service Worker registriert werden. \\
@@ -197,17 +343,7 @@ this.addEventListener('sync', function(event)
 });
 \end{lstlisting}
 
+Die Funktion \code{syncLocalDatabase()} synchronisiert die locale IndexedDB mit der Datenbank des Applicationserver. Dabei werden ausschließlich Daten lokal im Client gespeichert, die für den Benutzer relevant sind. Die Funktion gibt einen \code{Promise} zurück, so dass die Synchronisation asynchron im Hintergrund ausgeführt werden kann. \\
+Bei jedem Sync wird der aktuelle Timestamp in einem gesonderten \code{STORE} (dieser enthält ebenfalls weitere Konfigurationsparameter) gespeichert und nur diejenigen Daten vom Applicationserver angefordert, die sich seit der letzten Aktualisierung geändert haben. Anschließend werden diese Objekte durchlaufen und der Timestamp der letzten Änderung mit der letzten Änderung des lokal hinterlegten Objekts verglichen und ggf. wird der Eintrag aktualisiert.
 
- 
-
-\todo{Eventuell passt hier die ALternative PouchDB hin\ldots}
-
-\subsection{Web Push API}
-
-\subsubsection{Bereitstellung von benutzerspezifischem Payload}
-
-\subsection{Notification API}
-
-\subsection{Push-Benachrichtigungen}
-
-
+Schlägt die Synchronisation fehl, wird diese automatisch vom Background Sync Dienst wiederholt (durch erneuten auslösen eines \code{sync}"=Events).

@@ -4,9 +4,9 @@
 \section{Offlinefähigkeit}
 \label{sec_konzeption_offline}
 
-Konventionelle Webanwendungen benötigen eine dauerhafte Verbindung zum einem Webserver, um Ressourcen abzufragen. Selbst bei kurzen Verbindungsabbrüchen ist eine Arbeit mit solchen Anwendung unmöglich und in vielen Szenarien nicht akzeptabel. In den folgenden Abschnitten \ref{subsec_konzept_caching-statische-ressourcen} und \ref{subsec_konzeption_caching-modell} werden Methoden beschrieben, um dieses Problem zu lösen und die Benutzererfahrung, durch Offlinefähigkeit einer Webanwendung, zu verbessern. 
+Konventionelle Webanwendungen benötigen eine dauerhafte Verbindung zum einem Webserver, um Ressourcen abzufragen. Selbst bei kurzen Verbindungsabbrüchen ist eine Arbeit mit solchen Anwendung unmöglich und in vielen Szenarien nicht akzeptabel. In den folgenden Abschnitten \ref{subsec_konzept_caching-statische-ressourcen} und \ref{subsec_konzeption_caching-modell} werden Methoden beschrieben, um dieses Problem mit Hilfe der Service Worker Technologie zu lösen und die Benutzererfahrung, durch Offlinefähigkeit einer Webanwendung, zu verbessern. 
 
-Grundsätzlich kommen für das vorliegende Szenario zwei Varianten der Offlinefähigkeit in Frage. Die Variante \textbf{Überwindung von kurzen Verbindungsabbrüchen} sorgt dafür, dass die Anwendung trotz kurzfristiger Verbindungsabbrüche weiter reagiert. Die Anwendung kann die Verbindung beispielsweise wiederherstellen, jedoch kommt bei dieser Variante keine lokale Persistenz von Daten und Synchronisation mit dem Server zum Einsatz. 
+Grundsätzlich kommen für das vorliegende Szenario zwei Varianten der Offlinefähigkeit in Frage. Die Variante \textbf{Überwindung von kurzen Verbindungsabbrüchen} sorgt dafür, dass die Anwendung trotz kurzfristiger Verbindungsabbrüche weiter reagiert. Die Anwendung kann die Verbindung beispielsweise wiederherstellen, jedoch kommt bei dieser Variante keine lokale Persistenz von Daten beim Client und Synchronisation mit dem Applicationserver zum Einsatz. 
 
 Bei \textbf{\glqq{}echter\grqq{} Offlinefähigkeit} hingegen ist die Webanwendung auch ohne eine Internetverbindung funktionsfähig. Benutzer können nicht nur Daten anzeigen, sondern auch hinzufügen oder löschen. Dies wird durch eine lokale Zwischenspeicherung des benutzerspezifischen Anwendungsmodels (\glqq{}Application State\grqq{}) und dessen Synchronisation mit dem Applicationserver im Onlinezustand erreicht. Der Benutzer kann so kontinuierlich mit der Webanwendung arbeiten, ohne darauf achten zu müssen, ob er mit dem Internet verbunden ist oder nicht. \\
 Zur Erfüllung der in Anforderung [FA-3] (vgl. Abschnitt \ref{sec_anforderungen_funktionale-anforderungen}) beschriebenen Offlinefähigkeit wird diese Variante bevorzugt.
@@ -15,7 +15,7 @@ Zur Erfüllung der in Anforderung [FA-3] (vgl. Abschnitt \ref{sec_anforderungen_
 \label{subsec_konzept_caching-statische-ressourcen}
 
 Während Webanwendungen einen Fehler anzeigen und eine weitere Verwendung unmöglich machen, sobald der Benutzer ohne aktive Internetverbindung versucht zu einer Seite zu navigieren, ist es in nativen Apps möglich sich weiter innerhalb der Anwendung zu bewegen. \\
-Eine hybride Webanwendung muss also die Möglichkeit bieten, zu erkennen, ob eine aktive Internetverbindung vorhanden ist oder nicht und entsprechend darauf reagieren. Hier kommt die Service Worker API ins Spiel. Diese Technologie bietet Entwicklern die Möglichkeit einer optimalen Bereitstellung von Offline"=Benutzererfahrung.   
+Eine progressive Webanwendung muss also die Möglichkeit bieten, zu erkennen, ob eine aktive Internetverbindung vorhanden ist oder nicht und entsprechend darauf reagieren. Hier kommt die Service Worker API ins Spiel. Diese Technologie bietet Entwicklern die Möglichkeit einer optimalen Bereitstellung von Offline"=Benutzererfahrung.   
 
 Wie in Abschnitt \ref{sec_grundladge_serviceworker} beschrieben handelt es sich beim Service Worker um eine Art Proxy zwischen der Webanwendung und dem Browser. Dadurch ist es möglich, Responses von HTTP-Request aufzunehmen, zu analysieren und ggf. anzupassen. Die Erkennung, ob ein Benutzer offline ist, ermöglicht es unterschiedlich auf einen HTTP"=Request zu reagieren. Dies ist eine Schlüsselfunktion, um die Anforderungen an Offlinefähigkeit erfüllen zu können.\\
 
@@ -49,12 +49,12 @@ Tabelle \ref{tbl_konzeption_caching-strategien} zeigt die fünf grundsätzlich m
 \label{image_konzept_caching-strategie}
 \end{figure} 
 
-Das \code{cacheFirst}-Verfahren bietet sich für den vorliegenden Anwendungsfall an; die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend versucht, diese im Hintergrund mit Ressourcen aus dem Internet zu aktualisieren (vgl. Abbildung \ref{image_konzept_caching-strategie}). Dadurch wird die Seite unabhängig vom Onlinezustand bei Anforderung schnell geladen und dem Benutzer eine optimale Offline-Benutzererfahrung ermöglicht.
+Das \code{cacheFirst}-Verfahren bietet sich für den vorliegenden Anwendungsfall an; die angeforderten Ressourcen werden direkt aus dem Cache geladen und anschließend versucht, diese im Hintergrund mit Ressourcen aus dem Internet zu aktualisieren (vgl. Abbildung \ref{image_konzept_caching-strategie}). Dadurch wird die Webseite unabhängig vom Onlinezustand bei Anforderung schnell geladen und dem Benutzer so eine optimale Offline-Benutzererfahrung ermöglicht.
 
 \subsection{lokale persistente Speicherung und Synchronisation des Application State}
 \label{subsec_konzeption_caching-modell}
 
-Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die hybride Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
+Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschriebenen Vorhaltung der statischen Ressourcen muss die progressive Webanwendung ebenfalls einen Mechanismus zur Verfügung stellen, um das Datenmodell im Offlinebetrieb bereitzustellen.
 
 \todo{Hier noch etwas über die Background.Sync API sagen\ldots}
 
@@ -64,8 +64,8 @@ Neben der in Abschnitt \ref{subsec_konzept_caching-statische-ressourcen} beschri
 \section{Web Push}
 \label{subsubsec_konzeption_serviceworker_push-api}
 
-Die Push"=API bietet Webanwendungen die Möglichkeit, von einem Server gesendete Nachrichten zu empfangen, unabhängig davon, ob die Webanwendung im Vordergrund oder sogar aktuell geladen ist. \\
-Damit eine App, Push-Nachrichten empfangen kann, muss sie einen aktiven Service-Worker haben. Wenn der Service-Worker aktiv ist, kann er Push"=Benachrichtigungen über seinen internen Push"=Manager (\code{PushManager.subscribe()}) abonnieren.
+Die Push"=API bietet Webanwendungen die Möglichkeit, von einem Server gesendete Nachrichten zu empfangen, unabhängig davon, ob die Webanwendung im Vordergrund ausgeführt oder aktuell überhaupt geöffnet ist. \\
+Um Push"=Nachrichten empfangen zu können, muss für die Webseite ein Service Worker registriert werden. Sobald dieser aktiv ist, können Push"=Benachrichtigungen über den Push"=Manager des Service Workers abonnieren werden (\code{PushManager.subscribe()}).
 
 Die resultierende \code{PushSubscription} enthält alle Informationen, die die Anwendung benötigt, um eine Push"=Nachricht zu senden. Neben einem Endpoint ebenfalls den für das Senden von Daten erforderlichen Verschlüsselungsschlüssel.
 
@@ -105,13 +105,12 @@ Um eine Push"=Nachricht zu senden, muss ein HTTP-POST an die Endpoint"=URL (vgl.
 
 Sobald die Push"=Nachricht vom Web Push Server erfolgreich versendet wurde, antwortet dieser mit einem Response, welcher eine eindeutige Message ID enthält. Diese referenziert auf eine bestimmte Push"=Benachrichtigung.
 
-Den vom Applicationserver zuvor generierten Nutzdaten (Payload) wird diese Message ID zugeordnet und auf für Clientanfragen vorgehalten. \\
+Den vom Applicationserver zuvor generierten Nutzdaten (Payload) wird diese Message ID zugeordnet und für Clientanfragen vorgehalten. \\
 Sobald eine Push"=Nachricht vom Client empfangen wird, löst dies ein \code{onPush}"=Event aus (vgl. Abbildung \ref{image_konzeption_architektur-serviceworker-push} Punkt 4). Der Event-Listener reagiert mit einer direkten Anfrage beim Applicationserver und fragt ggf. vorhandenen Payload für die aktuelle Message ID ab.
 
-\todo{Es ist auch so möglich: Besser ausformulieren}Um Nutzdaten in die Anfrage einzubinden, müssen diese verschlüsselt werden (mit dem öffentlichen Schlüssel des Clients (public key)).
-Da wir uns gegen eine Nutzdatensendung über den Browserhersteller entschieden haben, entfällt bei uns dieser Schritt. 
+Alternativ ist es möglich, den Payload im \code{body} der Push"=Nachricht zu übertragen. Dabei ist es zwingend erforderlich, dass die Nutzdaten verschlüsselt übertragen werden. Ansonsten würde seitens des Push"=Messaging"=Servers der Payload auf \code{NULL} gesetzt werden. \\
+Im Rahmen dieses Projekts wurde entschieden, dass keine Nutzdaten über \glqq externe\grqq{} Server geleitet werden sollen. Daher kommt diese Variante hier nicht zum Einsatz. Stattdessen wird der Payload aktiv vom Client beim Applicationserver abgefragt, sobald ein Push"=Event ausgelöst wird. 
 
-\newpage
 \section{Architekturbeschreibung}
 \label{sec_konzeption_serviceworker_architektur}
 

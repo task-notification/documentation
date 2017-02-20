@@ -1,22 +1,16 @@
 \chapter{Anforderungen}
 \label{chp_anforderungen}
 
-\section{allgemeine Beschreibung der Applikation}
-\label{sec_anfroderungen_allgemeine-beschreibung}
-
 Nach erfolgreicher Registrierung und Anmeldung kann der Benutzer Aufgaben anlegen, bearbeiten, anzeigen und löschen. Weiterhin gibt es eine Kontaktliste, in welcher alle Kontakte angezeigt werden, die ebenfalls für die Anwendung registriert sind und zu persönlichen Kontakten hinzugefügt wurden. Aufgaben können mit persönlichen Kontakten geteilt werden. 
 
 Über Änderungen an Gruppen oder Aufgaben wird der Benutzer über PUSH"=Benachrichtigungen informiert. Wenn einer Aufgabe ein Benachrichtigungszeitpunkt angegeben wurde, wird ebenfalls eine PUSH"=Notification angezeigt sobald die Aufgabe terminiert.
 
 \todo{Die Beispielanwendung als Einsatzszenario beschreiben\ldots}
 
-\newpage
 \section{funktionale Anforderungen}
 \label{sec_anforderungen_funktionale-anforderungen}
 
-Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenigen verstanden, welche zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
-
-\todo{weiter ausführen, was damit gemeint ist\ldots}
+Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenigen verstanden, welche zur direkten Zielerfüllung beitragen. Darunter zählen die Anforderung einer \glqq Single Page Application\grqq , Bereitstellung einer geeigneten Offline"=Benutzererfahrung sowie die Unterstützung von Push"=Benachrichtigungen in mobile Webanwendungen. Die Schnittstelle zum Applicationserver wird ebenfalls unter den funktionalen Anforderungen geführt.
 
 \paragraph{[FA-1] Single Page (Mobil) Application.} Die Webanwendung wird als hybride Single Page Application entwickelt. Der Sitzungszustand (\glqq Application State\grqq) wird auf dem Client gespeichert und im Hintergrund mit dem Applicationserver synchronisiert. Die Präsentationslogik wird in der \glqq Boot"=Phase\grqq{} einmal vom Client geladen und Inhalte zur Laufzeit dynamisch angepasst. Während der Navigation wird der Präsentationsfluss im Client nicht angehalten bzw. durch \glqq neu Laden\grqq{} unterbrochen.
 
@@ -41,9 +35,7 @@ Im Rahmen dieser Dokumentation werden unter funktionalen Anforderungen diejenige
 \section{nicht-funktionale Anforderungen}
 \label{sec_anforderungen_nicht-funktionale-anforderungen}
 
-Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen diejenigen verstanden, welche nicht zur direkten Zielerfüllung beitragen (vgl. \ref{sec_einleitung_motivation-ziele}).
-
-\todo{weiter ausführen, was damit gemeint ist\ldots}
+Im Rahmen dieser Dokumentation werden unter nicht-funktionalen Anforderungen diejenigen verstanden, welche nicht zur direkten Zielerfüllung beitragen. Darunter fallen vor allem Anforderungen an die Beispielapplikation. Die folgenden Anforderungen beschreiben im Großen und Ganzen den Funktionsumfang der Client"=Applikation. Darüber hinaus werden Ereignisse definiert, die innerhalb der Beispielanwendung, welche die Anzeige von Push"=Benachrichtigungen auslösen.
 
 \paragraph{[NFA-1] Look \& Feel einer nativen Android"=App.} Die Website soll sich optisch an den \glqq Material Design\grqq "=Richtlinien für Android"=Applikationen orientieren. Auf mobilen Endgeräten soll die Touch"=Unterstützung genauso gewährleistet sein, wie die für Smartphones typischen Wisch"=Gesten. Das Framework \glqq JQuery"=Mobile\grqq{} mit zugehörigem UI"=Framework \glqq JQuery"=Mobile"=UI\grqq{} kann als JQuery"=Erweiterung zu diesem Zweck eingesetzt werden.
 

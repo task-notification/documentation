@@ -32,9 +32,9 @@
 
 % Dokumentinformationen
 \usepackage[
-	pdftitle={Dokumentation TaskY},
-	pdfsubject={Softwaredokumentation},
-	pdfauthor={Michael Müller},
+	pdftitle={Dokumentation Service Worker},
+	pdfsubject={Projektdokumentation},
+	pdfauthor={David Howown, Michael Müller},
 	pdftex=true, 
 	colorlinks=true,
  	breaklinks=true,
@@ -64,7 +64,7 @@
   basicstyle=\footnotesize,
   showstringspaces=false,
   columns=flexible,
-  basicstyle={\small\ttfamily},
+  basicstyle={\footnotesize\ttfamily},
   numberstyle=\tiny\color{gray},
   keywordstyle=\color{blue},
   commentstyle=\color{dkgreen},
@@ -85,7 +85,7 @@
 % nicht einrücken nach Absatz
 \setlength{\parindent}{0pt}
 
-\def\code#1{\texttt{#1}}
+\def\code#1{\texttt{{\small #1}}}
 \usepackage{etoolbox}
 \makeatletter
 \gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
@@ -110,7 +110,7 @@
 % ============= Kopf- und Fußzeile =============
 \pagestyle{fancy}
 %
-\lhead{Dokumentation TaskY}
+\lhead{Dokumentation Service Worker}
 \chead{}
 \rhead{\slshape \leftmark}
 %%
@@ -194,8 +194,8 @@
 %Seitennummerierung neu beginnen, Zahlen [arabic], röm.Zahlen [roman,Roman], Buchstaben [alph,Alph]
 \pagenumbering{Roman}
 \chapter{Anhang}
-\input{A1_api.tex}
-\newpage
+%\input{A1_api.tex}
+%\newpage
 \input{A2_applicationserver.tex}
 \newpage
 \input{A3_serviceworker.tex}
